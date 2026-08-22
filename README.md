@@ -20,3 +20,4 @@ Open `index.html` and play — scores stay in your browser via `localStorage`.
 
 ```bash
 python -m http.server 8000
+![Game Hub Screenshot](https://github.com/awakenedsniper78-beep/game-hub/blob/main/Screenshot%202026-08-22%20123131.png?raw=true)
