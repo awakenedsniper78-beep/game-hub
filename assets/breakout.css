@@ -1,0 +1,86 @@
+/* Breakout-only panels: lives pips, the power-up rack, the brick-value key
+   and the rally log. The three-column chassis itself lives in play.css. */
+
+.lives { display: flex; gap: 5px; }
+.lives i {
+  display: block;
+  width: 20px;
+  height: 7px;
+  background: var(--accent);
+}
+.lives i.spent { background: none; box-shadow: inset 0 0 0 1px var(--rule); }
+
+.powers { display: flex; flex-direction: column; gap: 2px; }
+.powers .pw {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 6px 8px;
+  border: 1px solid var(--rule);
+  font: 400 11px var(--sans);
+  color: var(--dim);
+}
+.powers .pw i {
+  flex: none;
+  width: 15px;
+  height: 15px;
+  display: grid;
+  place-items: center;
+  font: 600 9px var(--mono);
+  font-style: normal;
+  color: #0b0d16;
+}
+.powers .pw b {
+  margin-left: auto;
+  font: 400 9.5px var(--mono);
+  letter-spacing: 1px;
+  color: var(--dim);
+}
+.powers .pw.on {
+  border-color: var(--accent);
+  background: rgba(79, 124, 255, .14);
+  color: var(--text);
+}
+.powers .pw.on b { color: var(--accent); }
+
+.pw-wide i  { background: var(--accent); }
+.pw-slow i  { background: var(--green); }
+.pw-multi i { background: var(--violet); }
+.pw-life i  { background: var(--gold); }
+
+.brick-key {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font: 400 11px var(--sans);
+  color: var(--muted);
+}
+.brick-key span { display: flex; align-items: center; gap: 9px; }
+.brick-key i { flex: none; display: block; width: 24px; height: 10px; }
+.brick-key b {
+  margin-left: auto;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--text);
+}
+.brick-key .swatch-90 { background: var(--pink); box-shadow: inset 0 0 0 1px rgba(11, 14, 26, .55); }
+.brick-key .swatch-70 { background: var(--violet); }
+.brick-key .swatch-50 { background: var(--accent); }
+.brick-key .swatch-30 { background: var(--green); }
+.key-note { margin-top: 9px; line-height: 1.6; }
+
+.rallylog {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  font: 400 11px var(--mono);
+  color: var(--muted);
+  letter-spacing: .5px;
+  min-height: 76px;
+}
+.rallylog time { color: var(--accent); font-style: normal; }
+.rallylog .idle { color: var(--dim); }
+
+@media (max-width: 1000px) {
+  .rail.left .lives { margin-top: 2px; }
+}

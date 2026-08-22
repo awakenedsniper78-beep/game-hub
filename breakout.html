@@ -3,13 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tetris — Arcade</title>
+<title>Breakout — Arcade</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/site.css?v=20260822b">
 <link rel="stylesheet" href="assets/play.css?v=20260822b">
-<link rel="stylesheet" href="assets/tetris.css?v=20260822b">
+<link rel="stylesheet" href="assets/breakout.css?v=20260822b">
 </head>
 <body class="is-lit">
 
@@ -17,12 +17,12 @@
   <div class="shell">
     <div class="brand-block">
       <a class="brand" href="index.html">ARCADE</a>
-      <span class="micro" id="sessionMeta">TETRIS / BUILD 1.2 / SESSION 00:00</span>
+      <span class="micro" id="sessionMeta">BREAKOUT / BUILD 1.0 / SESSION 00:00</span>
     </div>
     <nav class="site-nav" aria-label="Main">
       <a href="index.html">Home</a>
       <a href="games.html">Library</a>
-      <a href="tetris.html" aria-current="page">Play</a>
+      <a href="breakout.html" aria-current="page">Play</a>
       <a href="profile.html">Profile</a>
     </nav>
   </div>
@@ -40,59 +40,70 @@
             <b class="figure hero" id="score" aria-live="polite">0</b>
           </div>
           <div class="pair">
-            <div><div class="micro sm">Lines</div><b class="figure sm" id="lines">0</b></div>
-            <div><div class="micro sm">Level</div><b class="figure sm" id="level">1</b></div>
+            <div><div class="micro sm">Stage</div><b class="figure sm" id="stage">01</b></div>
+            <div><div class="micro sm">Combo</div><b class="figure sm" id="combo">×1</b></div>
+          </div>
+          <div>
+            <div class="micro sm">Lives</div>
+            <div class="lives" id="lives" aria-label="Lives remaining"><i></i><i></i><i></i></div>
           </div>
         </div>
       </section>
 
       <section>
-        <span class="micro">Level progress</span>
-        <div class="bar"><span id="levelBar" style="width:0%"></span></div>
+        <span class="micro">Bricks cleared</span>
+        <div class="bar"><span id="brickBar" style="width:0%"></span></div>
         <div style="display:flex;justify-content:space-between;margin-top:7px" class="micro sm">
-          <span id="levelToGo">10 to go</span><span id="levelPct">0%</span>
+          <span id="brickCount">0 of 48</span><span id="brickPct">0%</span>
         </div>
       </section>
 
       <section>
-        <span class="micro">Hold</span>
-        <div class="slot-box hold-box marks">
-          <i class="cm"></i>
-          <canvas id="hold" width="150" height="70" aria-label="Held piece" role="img"></canvas>
+        <span class="micro">Power-ups</span>
+        <div class="powers" id="powers">
+          <div class="pw pw-wide" data-power="wide"><i>W</i>Wide paddle<b>12s</b></div>
+          <div class="pw pw-slow" data-power="slow"><i>S</i>Slow ball<b>10s</b></div>
+          <div class="pw pw-multi" data-power="multi"><i>M</i>Multiball<b>×0</b></div>
+          <div class="pw pw-life" data-power="life"><i>E</i>Extra life<b>×0</b></div>
         </div>
-        <div class="micro sm" style="margin-top:8px">Press C to swap</div>
+      </section>
+
+      <section>
+        <span class="micro">Brick values</span>
+        <div class="brick-key">
+          <span><i class="swatch-90"></i>Reinforced<b>90</b></span>
+          <span><i class="swatch-70"></i>Row 2<b>70</b></span>
+          <span><i class="swatch-50"></i>Row 3<b>50</b></span>
+          <span><i class="swatch-30"></i>Row 4<b>30</b></span>
+        </div>
+        <p class="micro sm key-note">Reinforced bricks take two hits. The combo rises with every brick
+          broken before the ball comes back.</p>
       </section>
     </div>
 
     <div class="field-wrap">
       <div class="field marks lg">
         <i class="cm"></i>
-        <div class="ruler" aria-hidden="true"><span>20</span><span>15</span><span>10</span><span>05</span><span>00</span></div>
+        <div class="ruler" aria-hidden="true"><span>04</span><span>03</span><span>02</span><span>01</span><span>00</span></div>
         <div class="board-frame">
-          <canvas id="board" width="240" height="480" aria-label="Tetris field" role="img"></canvas>
+          <canvas id="board" width="560" height="420" aria-label="Breakout field" role="img"></canvas>
           <div class="overlay" id="overlay">
-            <h2 id="ovTitle">Tetris</h2>
+            <h2 id="ovTitle">Breakout</h2>
             <p id="ovMsg">Press Start or hit Enter</p>
             <button class="btn" id="startBtn" type="button">Start</button>
           </div>
         </div>
-        <div class="field-caption"><span>Field 10 × 20</span><span id="gravity">Gravity 0.80s</span></div>
+        <div class="field-caption">
+          <span>Wall 12 × 4 · 48 bricks</span>
+          <span id="ballMeta">Ball 300px/s · 1 in play</span>
+        </div>
       </div>
     </div>
 
     <div class="rail right">
       <section>
-        <span class="micro">Next / queue</span>
-        <div class="queue">
-          <div class="slot-box n1 marks">
-            <i class="cm"></i>
-            <canvas id="next1" width="120" height="52" aria-label="Next piece" role="img"></canvas>
-          </div>
-          <div class="minor">
-            <div class="slot-box n2"><canvas id="next2" width="88" height="40" aria-label="Second in queue" role="img"></canvas></div>
-            <div class="slot-box n3"><canvas id="next3" width="88" height="40" aria-label="Third in queue" role="img"></canvas></div>
-          </div>
-        </div>
+        <span class="micro">Rally log</span>
+        <div class="rallylog" id="rallyLog"></div>
       </section>
 
       <section class="scores">
@@ -106,20 +117,15 @@
       <section>
         <span class="micro">Controls</span>
         <div class="keys">
-          <span class="combo"><kbd>&larr;</kbd><kbd>&rarr;</kbd></span><span>Move</span>
-          <kbd>&darr;</kbd><span>Soft drop</span>
-          <kbd>&uarr; / X</kbd><span>Rotate</span>
-          <kbd>Z</kbd><span>Rotate CCW</span>
-          <kbd>Space</kbd><span>Hard drop</span>
-          <kbd>C</kbd><span>Hold</span>
+          <span class="combo"><kbd>&larr;</kbd><kbd>&rarr;</kbd></span><span>Move paddle</span>
+          <kbd>A D</kbd><span>Same, left hand</span>
+          <kbd>Mouse</kbd><span>Steer along the field</span>
+          <kbd>Space</kbd><span>Serve the ball</span>
           <kbd>P</kbd><span>Pause</span>
         </div>
         <button class="btn block marks" id="pauseBtn" type="button" style="margin-top:16px">
           Pause<i class="cm"></i>
         </button>
-        <p class="micro sm" style="margin-top:12px;line-height:1.7">
-          Clear a full row <b style="color:var(--text)">or column</b> to score.
-        </p>
       </section>
     </div>
 
@@ -130,6 +136,6 @@
 
 <script src="assets/catalog.js?v=20260822b"></script>
 <script src="assets/stats.js?v=20260822b"></script>
-<script src="assets/tetris.js?v=20260822b"></script>
+<script src="assets/breakout.js?v=20260822b"></script>
 </body>
 </html>
