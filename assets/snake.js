@@ -5,6 +5,7 @@
 
   // ---------- Constants ----------
   const COLS = 20, ROWS = 20, CELL = 22;
+  const FIELD_W = COLS * CELL, FIELD_H = ROWS * CELL;   // logical drawing size
   const BODY_W = 14;             // ribbon thickness, matching the mockup
   const HEAD_W = 18;
   const TAIL_W = 6;
@@ -271,10 +272,10 @@
 
   function drawGrid() {
     ctx.fillStyle = INK_GROUND;
-    ctx.fillRect(0, 0, boardCv.width, boardCv.height);
+    ctx.fillRect(0, 0, FIELD_W, FIELD_H);
     ctx.fillStyle = INK_GRID;
-    for (let x = 0; x <= COLS; x++) ctx.fillRect(x * CELL, 0, 1, boardCv.height);
-    for (let y = 0; y <= ROWS; y++) ctx.fillRect(0, y * CELL, boardCv.width, 1);
+    for (let x = 0; x <= COLS; x++) ctx.fillRect(x * CELL, 0, 1, FIELD_H);
+    for (let y = 0; y <= ROWS; y++) ctx.fillRect(0, y * CELL, FIELD_W, 1);
   }
 
   /** Bar joining two neighbouring cell centres — the ribbon body. */
@@ -540,5 +541,6 @@
   updateMeta();
   renderLog();
   renderTopScores();
-  draw();
+  if (window.Arcade && window.Arcade.fitCanvas) window.Arcade.fitCanvas(boardCv, FIELD_W, FIELD_H, draw);
+  else draw();
 })();

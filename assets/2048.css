@@ -1,21 +1,29 @@
 /* 2048-only panels: the tile grid, tile scale key and move log. */
 
+/* Field scaling — the 4 x 4 grid is square and fluid; tile type is sized
+   against the board frame so the numbers grow with the cells. */
+body.is-play { --field-min: 452px; }   /* 434 grid + 18 frame */
+.field { --field-max: var(--field-h); }
+.board-frame { container-type: inline-size; }
+
 .tile-grid {
   display: grid;
-  grid-template-columns: repeat(4, 104px);
-  grid-template-rows: repeat(4, 104px);
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(4, 1fr);
+  width: 100%;
+  aspect-ratio: 1;
   gap: 6px;
   background: var(--bg-deep);
 }
 .tile-grid .cell {
   display: grid;
   place-items: center;
-  font: 600 34px var(--cond);
+  font: 600 8cqw/1 var(--cond);
   letter-spacing: 1px;
   color: var(--text);
 }
 .tile-grid .cell.empty { border: 1px dashed var(--rule); }
-.tile-grid .cell.small { font-size: 26px; }   /* five-digit values keep their box */
+.tile-grid .cell.small { font-size: 6cqw; }   /* five-digit values keep their box */
 
 /* Tile ramp, straight off the mockup's scale key */
 .t-2,    .t-4    { background: #1a2138; color: #8b93b8; }
@@ -57,12 +65,3 @@
 .movelog b { color: var(--accent); font-weight: 400; }
 .movelog .idle { color: var(--dim); }
 
-@media (max-width: 720px) {
-  .tile-grid {
-    grid-template-columns: repeat(4, 1fr);
-    grid-template-rows: repeat(4, 1fr);
-    width: min(434px, 100%);
-    aspect-ratio: 1;
-  }
-  .tile-grid .cell { font-size: 26px; }
-}

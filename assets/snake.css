@@ -1,5 +1,10 @@
 /* Snake-only panels: mode picker, legend and the run log. */
 
+/* Field scaling — the 20 x 20 field is square. */
+body.is-play { --field-min: 458px; }   /* 440 canvas + 18 frame */
+.field { --field-max: var(--field-h); }
+#board { aspect-ratio: 1; }
+
 .modes {
   display: flex;
   flex-direction: column;

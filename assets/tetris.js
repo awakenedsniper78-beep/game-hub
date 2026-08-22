@@ -5,6 +5,7 @@
 
   // ---------- Constants ----------
   const COLS = 10, ROWS = 20, CELL = 24, GAP = 1;
+  const FIELD_W = COLS * CELL, FIELD_H = ROWS * CELL;   // logical drawing size
   const BASE_DROP_MS = 800;
   const MIN_DROP_MS = 100;
   const DROP_STEP_MS = 70;
@@ -299,7 +300,7 @@
   function draw() {
     // Gutter colour shows through as the grid.
     bctx.fillStyle = INK_GAP;
-    bctx.fillRect(0, 0, boardCv.width, boardCv.height);
+    bctx.fillRect(0, 0, FIELD_W, FIELD_H);
     for (let y = 0; y < ROWS; y++) {
       for (let x = 0; x < COLS; x++) {
         const type = state.grid[y][x];
@@ -510,5 +511,6 @@
   renderTopScores();
   drawQueue();
   drawHold();
-  draw();
+  if (window.Arcade && window.Arcade.fitCanvas) window.Arcade.fitCanvas(boardCv, FIELD_W, FIELD_H, draw);
+  else draw();
 })();

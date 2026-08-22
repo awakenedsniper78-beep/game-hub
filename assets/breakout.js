@@ -755,5 +755,6 @@
   updateMeta();
   renderLog();
   renderTopScores();
-  draw();
+  if (window.Arcade && window.Arcade.fitCanvas) window.Arcade.fitCanvas(boardCv, W, H, draw);
+  else draw();
 })();
