@@ -32,10 +32,10 @@ window.Arcade.catalog = [
     id: "breakout",
     name: "Breakout",
     icon: "🧱",
-    href: null,
-    status: "planned",
+    href: "breakout.html",
+    status: "playable",
     genre: "Arcade",
-    build: null,
+    build: "1.0",
     blurb: "One paddle, one ball, forty-eight bricks.",
   },
   {
