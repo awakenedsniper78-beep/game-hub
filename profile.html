@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Profile — Arcade</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
+<link rel="stylesheet" href="assets/pages.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="shell">
+    <a class="brand" href="index.html">ARCADE</a>
+    <nav class="site-nav" aria-label="Main">
+      <a href="index.html">Home</a>
+      <a href="games.html">Library</a>
+      <a href="profile.html" aria-current="page">Profile</a>
+      <a class="cta" href="tetris.html">Play Tetris</a>
+    </nav>
+  </div>
+</header>
+
+<main class="shell">
+
+  <section class="split" style="grid-template-columns:1fr 340px">
+    <div class="profile-id">
+      <div class="avatar marks">YOU<i class="cm"></i></div>
+      <div>
+        <div class="micro" style="margin-bottom:6px">Player 01 / local profile</div>
+        <h1>Anonymous</h1>
+        <div style="margin-top:8px;font-size:12.5px;color:var(--muted)" id="sessionLine">Saved in this browser</div>
+      </div>
+    </div>
+    <div class="profile-pair">
+      <div><div class="micro sm">Day streak</div><div class="figure lg" id="streak">0</div></div>
+      <div><div class="micro sm">Time played</div><div class="figure lg" id="timePlayed">0m</div></div>
+    </div>
+  </section>
+
+  <section class="stat-strip">
+    <div><span class="micro sm">Total score</span><div class="figure" id="totalScore">0</div></div>
+    <div><span class="micro sm">Games played</span><div class="figure" id="gamesPlayed">0</div></div>
+    <div><span class="micro sm">Lines cleared</span><div class="figure" id="linesCleared">0</div></div>
+    <div><span class="micro sm">Best level</span><div class="figure" id="bestLevel">—</div></div>
+  </section>
+
+  <section class="panel-cols">
+    <div>
+      <div class="micro" style="margin-bottom:14px">Personal bests</div>
+      <div class="bests" id="bests">
+        <div class="head">
+          <span class="cell">Title</span>
+          <span class="cell val">Best</span>
+          <span class="cell rank" style="color:var(--dim)">Runs</span>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="micro" style="margin-bottom:14px" id="sparkLabel">Last 14 sessions · score</div>
+      <div class="spark" id="spark" role="img" aria-label="Scores of recent sessions"></div>
+      <div style="display:flex;justify-content:space-between;margin-top:8px" class="micro sm">
+        <span id="sparkFrom">—</span><span id="sparkTo">—</span>
+      </div>
+      <div style="margin-top:22px;padding-top:16px;border-top:1px solid var(--border);font:400 12.5px/1.6 var(--sans);color:var(--muted)" id="trend"></div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">Arcade · history is stored on this device only</footer>
+
+<script src="assets/catalog.js"></script>
+<script src="assets/stats.js"></script>
+<script src="assets/profile.js"></script>
+</body>
+</html>

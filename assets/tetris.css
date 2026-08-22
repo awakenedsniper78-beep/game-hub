@@ -1,0 +1,19 @@
+/* Tetris-only panels. The three-column chassis lives in play.css. */
+
+.slot-box {
+  position: relative;
+  border: 1px solid var(--border);
+  background: var(--bg-deep);
+  display: grid;
+  place-items: center;
+}
+.slot-box canvas { display: block; }
+
+.queue { display: flex; flex-direction: column; gap: 8px; }
+.queue .minor { display: flex; gap: 8px; }
+.queue .minor .slot-box { flex: 1; }
+.queue .slot-box.n1 { height: 64px; }
+.queue .slot-box.n2 { height: 48px; opacity: .75; }
+.queue .slot-box.n3 { height: 48px; opacity: .55; }
+
+.hold-box { height: 86px; }

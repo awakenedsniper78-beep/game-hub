@@ -1,0 +1,50 @@
+/* Snake-only panels: mode picker, legend and the run log. */
+
+.modes {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.modes button {
+  padding: 8px 11px;
+  border: 1px solid var(--border);
+  background: none;
+  color: var(--muted);
+  font: 500 10.5px var(--sans);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  text-align: left;
+  cursor: pointer;
+}
+.modes button:hover { color: var(--text); }
+.modes button[aria-pressed="true"] {
+  border-color: var(--accent);
+  background: rgba(79, 124, 255, .16);
+  color: var(--text);
+}
+.mode-note { margin-top: 8px; line-height: 1.6; }
+
+.legend {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font: 400 11px var(--sans);
+  color: var(--muted);
+}
+.legend span { display: flex; align-items: center; gap: 9px; }
+.legend i { width: 12px; height: 12px; display: block; flex: none; }
+.legend .swatch-head { background: #66e0a3; }
+.legend .swatch-body { background: #3f9d74; }
+.legend .swatch-apple { background: #ff6b9d; }
+
+.runlog {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  font: 400 11px var(--mono);
+  color: var(--muted);
+  letter-spacing: .5px;
+  min-height: 76px;
+}
+.runlog time { color: var(--accent); font-style: normal; }
+.runlog .idle { color: var(--dim); }

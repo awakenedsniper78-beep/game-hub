@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Library — Arcade</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
+<link rel="stylesheet" href="assets/pages.css">
+</head>
+<body class="is-lit">
+
+<header class="site-header">
+  <div class="shell">
+    <div class="brand-block">
+      <a class="brand" href="index.html">ARCADE</a>
+      <span class="micro" id="catalogLine">EST. 2026 / 06 TITLES</span>
+    </div>
+    <nav class="site-nav" aria-label="Main">
+      <a href="index.html">Home</a>
+      <a href="games.html" aria-current="page">Library</a>
+      <a href="profile.html">Profile</a>
+      <a class="cta" href="tetris.html">Play Tetris</a>
+    </nav>
+  </div>
+</header>
+
+<main class="shell">
+
+  <section class="split">
+    <div style="padding:34px var(--gutter) 30px">
+      <div class="micro accent" style="margin-bottom:10px">01 / LIBRARY</div>
+      <h1 class="h1">Everything in<br>the arcade</h1>
+      <p class="lede" style="margin-top:12px;max-width:430px">
+        Six browser titles, no accounts, no installs. New builds land here the day they compile.
+      </p>
+    </div>
+    <div style="padding:34px var(--gutter) 30px;display:flex;flex-direction:column;gap:16px">
+      <div style="display:flex;justify-content:space-between;align-items:baseline">
+        <span class="micro sm">Plays this week</span>
+        <span class="figure" id="playsWeek">0</span>
+      </div>
+      <div style="height:1px;background:var(--border)"></div>
+      <div style="display:flex;justify-content:space-between;align-items:baseline">
+        <span class="micro sm">Lines cleared</span>
+        <span class="figure" id="linesTotal">0</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="filter-bar">
+    <div class="search marks">
+      <i class="cm"></i>
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#5a6390" stroke-width="1.5" aria-hidden="true">
+        <circle cx="11" cy="11" r="7"></circle><path d="M20 20l-4.3-4.3"></path>
+      </svg>
+      <label class="micro sm" for="q" style="position:absolute;left:-9999px">Search titles</label>
+      <input id="q" type="search" placeholder="Search titles, tags, high scores…" autocomplete="off">
+    </div>
+    <div class="filters" id="filters" role="group" aria-label="Filter titles">
+      <button type="button" data-filter="all" aria-pressed="true">All</button>
+      <button type="button" data-filter="puzzle" aria-pressed="false">Puzzle</button>
+      <button type="button" data-filter="arcade" aria-pressed="false">Arcade</button>
+      <button type="button" data-filter="playable" aria-pressed="false">Playable</button>
+      <button type="button" data-filter="wip" aria-pressed="false">WIP</button>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <span class="micro">Recently played</span>
+      <button type="button" class="micro accent" id="clearHistory"
+              style="background:none;border:none;cursor:pointer;letter-spacing:1.5px">Clear history</button>
+    </div>
+    <div class="recent-strip" id="recentStrip"></div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <span class="micro" id="countLabel">All titles / 06</span>
+      <span class="micro" id="sortLabel">Sort: recent</span>
+    </div>
+    <div class="title-grid" id="titleGrid"></div>
+    <p class="empty" id="noResults" hidden style="padding:24px 0">No titles match that search.</p>
+  </section>
+
+</main>
+
+<footer class="site-footer">Arcade · a small collection of browser games</footer>
+
+<script src="assets/catalog.js"></script>
+<script src="assets/stats.js"></script>
+<script src="assets/library.js"></script>
+</body>
+</html>

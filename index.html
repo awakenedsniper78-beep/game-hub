@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arcade — a small collection of browser games</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
+<link rel="stylesheet" href="assets/pages.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="shell">
+    <a class="brand" href="index.html">ARCADE</a>
+    <nav class="site-nav" aria-label="Main">
+      <a href="index.html" aria-current="page">Home</a>
+      <a href="games.html">Library</a>
+      <a href="profile.html">Profile</a>
+    </nav>
+  </div>
+</header>
+
+<main class="shell">
+
+  <section class="hero">
+    <div class="hero-inner">
+      <div class="hero-copy">
+        <div class="micro accent" style="letter-spacing:3px;margin-bottom:16px">A small collection of browser games</div>
+        <h1>Press<br><em>start</em></h1>
+        <p>No launcher, no login, no patch notes. Every title loads in under a second and remembers your best run in this browser.</p>
+        <div class="hero-actions">
+          <a class="btn marks" href="games.html">Browse the library<i class="cm"></i></a>
+        </div>
+      </div>
+      <div class="spec">
+        <div class="spec-head micro">Spec sheet</div>
+        <div class="spec-row"><span>Titles playable</span><b id="specPlayable">—</b></div>
+        <div class="spec-row"><span>Build step</span><b>NONE</b></div>
+        <div class="spec-row"><span>Dependencies</span><b>NONE</b></div>
+        <div class="spec-row"><span>Accounts required</span><b>NO</b></div>
+        <div class="spec-row"><span>Runs offline</span><b>YES</b></div>
+      </div>
+    </div>
+  </section>
+
+  <nav class="title-strip" id="titleStrip" aria-label="All titles"></nav>
+
+  <section class="featured">
+    <div>
+      <div class="micro" style="margin-bottom:14px">Featured / Fig. 01</div>
+      <div class="shot marks">
+        <i class="cm"></i>
+        <div class="mini-board" style="grid-template-columns:repeat(7,22px);grid-template-rows:repeat(4,22px)" aria-hidden="true">
+          <i data-c="a"></i><i data-c="a"></i><i data-c="a"></i><i data-c="a"></i><i></i><i data-c="g"></i><i data-c="g"></i>
+          <i></i><i></i><i></i><i></i><i data-c="g"></i><i data-c="g"></i><i></i>
+          <i data-c="v"></i><i data-c="v"></i><i data-c="v"></i><i></i><i data-c="y"></i><i data-c="y"></i><i></i>
+          <i></i><i data-c="v"></i><i></i><i data-c="p"></i><i data-c="y"></i><i data-c="y"></i><i data-c="p"></i>
+        </div>
+      </div>
+      <h2 class="h2" style="margin-top:16px">Tetris</h2>
+      <p>Stack the falling pieces and clear full rows <em>or columns</em> — this build scores both directions. Hold, hard drop and ghost preview included.</p>
+    </div>
+    <div>
+      <div class="micro" style="margin-bottom:14px">Your top runs</div>
+      <div id="topRuns"></div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">Arcade · a small collection of browser games</footer>
+
+<script src="assets/catalog.js"></script>
+<script src="assets/stats.js"></script>
+<script src="assets/home.js"></script>
+</body>
+</html>

@@ -1,0 +1,268 @@
+/* ===========================================================================
+   Arcade shell — tokens, layout, nav and the shared "blueprint" primitives.
+   Implements the design system in "Arcade Mockups.dc.html".
+   Everything is square-cornered, 1px-ruled, and labelled in mono micro-caps.
+   =========================================================================== */
+
+:root {
+  /* Ground */
+  --bg: #0f1220;
+  --bg-deep: #0b0e1a;
+  --panel: #151a2c;
+  --panel-2: #1a1f35;
+  --border: #2c3352;
+  --rule: #1f2540;
+  --grid: #171c30;
+
+  /* Ink */
+  --text: #e8ecff;
+  --muted: #8b93b8;
+  --dim: #5a6390;
+
+  /* Accent + piece palette (shared with the Tetris renderer) */
+  --accent: #4f7cff;
+  --violet: #b06bff;
+  --pink: #ff6b9d;
+  --green: #66e0a3;
+  --gold: #ffd166;
+
+  /* Type */
+  --sans: Barlow, "Segoe UI", system-ui, sans-serif;
+  --cond: "Barlow Condensed", "Segoe UI Semibold", system-ui, sans-serif;
+  --mono: ui-monospace, Menlo, Consolas, monospace;
+
+  --gutter: 32px;
+  --shell: 1120px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { color-scheme: dark; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font: 400 14px/1.5 var(--sans);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  -webkit-font-smoothing: antialiased;
+}
+
+body.is-lit {
+  background: radial-gradient(1100px 700px at 15% -20%, #1c2340 0%, var(--bg) 62%);
+  background-attachment: fixed;
+}
+
+a { color: var(--accent); text-decoration: none; }
+a:hover { color: #7b9bff; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* ---------------------------------------------------------------- typography
+   .micro  — mono micro-caps used for every panel label in the design
+   .figure — big tabular condensed number
+   .h1/2/3 — condensed uppercase headings                                     */
+
+.micro {
+  font: 400 10px var(--mono);
+  letter-spacing: 2px;
+  color: var(--dim);
+  text-transform: uppercase;
+}
+.micro.sm { font-size: 9.5px; letter-spacing: 1.5px; }
+.micro.accent { color: var(--accent); }
+
+.figure {
+  font: 600 30px/1 var(--cond);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: .5px;
+}
+.figure.lg { font-size: 46px; }
+.figure.sm { font-size: 22px; }
+
+.h1 { font: 600 46px/0.95 var(--cond); letter-spacing: 1px; text-transform: uppercase; }
+.h2 { font: 600 30px/1.05 var(--cond); letter-spacing: 1.5px; text-transform: uppercase; }
+.h3 { font: 600 20px/1.1 var(--cond); letter-spacing: 1.6px; text-transform: uppercase; }
+.lede { font: 400 14px/1.6 var(--sans); color: var(--muted); }
+
+/* ------------------------------------------------------------------- layout */
+
+.shell { width: 100%; max-width: var(--shell); margin: 0 auto; }
+
+main { flex: 1; width: 100%; }
+
+.split {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  border-bottom: 1px solid var(--border);
+}
+.split > * + * { border-left: 1px solid var(--border); }
+
+.section { padding: 26px var(--gutter) 0; }
+.section:last-child { padding-bottom: 40px; }
+.section-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+/* --------------------------------------------------------------------- nav */
+
+.site-header {
+  border-bottom: 1px solid var(--border);
+  background: rgba(11, 14, 26, .72);
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  backdrop-filter: blur(6px);
+}
+.site-header .shell {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 16px var(--gutter);
+  flex-wrap: wrap;
+}
+.brand-block { display: flex; align-items: center; gap: 26px; flex-wrap: wrap; }
+.brand {
+  font: 700 19px var(--cond);
+  letter-spacing: 5px;
+  background: linear-gradient(90deg, #4f7cff, #b06bff, #ff6b9d);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.brand:hover { filter: brightness(1.2); }
+
+.site-nav { display: flex; gap: 2px; flex-wrap: wrap; }
+.site-nav a {
+  padding: 8px 14px;
+  border: 1px solid transparent;
+  color: var(--muted);
+  font: 500 11px var(--sans);
+  letter-spacing: 1.6px;
+  text-transform: uppercase;
+}
+.site-nav a:hover { color: var(--text); }
+.site-nav a[aria-current="page"] {
+  color: var(--text);
+  background: var(--panel-2);
+  border-color: var(--border);
+}
+.site-nav a.cta { background: var(--accent); color: #0b0d16; border-color: var(--accent); }
+.site-nav a.cta:hover { background: #6b90ff; color: #0b0d16; }
+
+.site-footer {
+  border-top: 1px solid var(--border);
+  padding: 16px var(--gutter);
+  font: 400 10px var(--mono);
+  letter-spacing: 1.5px;
+  color: var(--dim);
+  text-transform: uppercase;
+}
+
+/* ---------------------------------------------------------------- primitives
+   .panel — bordered surface
+   .marks — the four blueprint crop marks. Needs one <i class="cm"></i> child:
+            the parent's pseudos draw the top pair, .cm draws the bottom pair. */
+
+.panel { border: 1px solid var(--border); background: var(--panel); }
+.panel.deep { background: var(--bg-deep); }
+.panel.dashed { border-style: dashed; background: none; }
+
+.marks { position: relative; }
+.marks::before, .marks::after,
+.marks > .cm::before, .marks > .cm::after {
+  content: "+";
+  position: absolute;
+  font: 400 11px var(--mono);
+  color: var(--accent);
+  line-height: 1;
+  pointer-events: none;
+}
+.marks::before { top: -6px; left: -5px; }
+.marks::after { top: -6px; right: -5px; }
+.marks > .cm::before { bottom: -6px; left: -5px; }
+.marks > .cm::after { bottom: -6px; right: -5px; }
+.marks.lg::before, .marks.lg::after,
+.marks.lg > .cm::before, .marks.lg > .cm::after { font-size: 13px; }
+.marks.lg::before { top: -8px; left: -7px; }
+.marks.lg::after { top: -8px; right: -7px; }
+.marks.lg > .cm::before { bottom: -8px; left: -7px; }
+.marks.lg > .cm::after { bottom: -8px; right: -7px; }
+
+.btn {
+  position: relative;
+  display: inline-block;
+  border: 1px solid var(--accent);
+  background: var(--accent);
+  color: #0b0d16;
+  font: 600 14px var(--cond);
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  padding: 13px 26px;
+  cursor: pointer;
+  text-align: center;
+}
+.btn:hover { background: #6b90ff; color: #0b0d16; }
+.btn.ghost { background: none; border-color: var(--border); color: var(--text); }
+.btn.ghost:hover { border-color: var(--accent); background: rgba(79, 124, 255, .1); color: var(--text); }
+.btn.block { display: block; width: 100%; padding: 11px; font-size: 13px; }
+
+.tag {
+  font: 500 9.5px var(--sans);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 3px 7px;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  white-space: nowrap;
+}
+.tag.on { background: var(--accent); border-color: var(--accent); color: #0b0d16; }
+
+kbd {
+  background: #232a4a;
+  border: 1px solid var(--border);
+  border-bottom-width: 2px;
+  padding: 2px 6px;
+  font: 400 10px var(--mono);
+  color: var(--text);
+}
+
+.bar { height: 6px; background: var(--panel); border: 1px solid var(--border); }
+.bar > span { display: block; height: 100%; background: var(--accent); }
+
+.row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 11px 0;
+  border-bottom: 1px solid var(--rule);
+}
+.row:last-child { border-bottom: none; }
+.row span { font: 400 12.5px var(--sans); color: var(--muted); }
+.row b { font: 600 20px var(--cond); font-variant-numeric: tabular-nums; color: var(--text); }
+.row.you span, .row.you b { color: var(--accent); }
+
+.stat-strip { display: grid; grid-template-columns: repeat(4, 1fr); border-bottom: 1px solid var(--border); }
+.stat-strip > div { padding: 20px 22px; border-right: 1px solid var(--border); }
+.stat-strip > div:last-child { border-right: none; }
+.stat-strip .micro { margin-bottom: 6px; display: block; }
+
+.empty { font: 400 12.5px/1.6 var(--sans); color: var(--muted); }
+
+/* --------------------------------------------------------------- responsive */
+
+@media (max-width: 900px) {
+  :root { --gutter: 20px; }
+  .split { grid-template-columns: 1fr; }
+  .split > * + * { border-left: none; border-top: 1px solid var(--border); }
+  .stat-strip { grid-template-columns: repeat(2, 1fr); }
+  .stat-strip > div:nth-child(2n) { border-right: none; }
+  .stat-strip > div:nth-child(-n+2) { border-bottom: 1px solid var(--border); }
+  .h1 { font-size: 34px; }
+}

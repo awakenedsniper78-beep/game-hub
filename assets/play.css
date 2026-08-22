@@ -1,0 +1,126 @@
+/* Shared play-screen chassis — the three-column instrument panel used by
+   every game (Tetris 1b, Snake 2a). Per-game panels live in <game>.css. */
+
+.play {
+  display: grid;
+  grid-template-columns: 210px 1fr 250px;
+  align-items: start;
+}
+
+.rail { min-height: 620px; }
+.rail.left { border-right: 1px solid var(--border); }
+.rail.right { border-left: 1px solid var(--border); }
+.rail section { padding: 16px 18px; border-bottom: 1px solid var(--border); }
+.rail section:last-child { border-bottom: none; }
+.rail .micro { display: block; margin-bottom: 10px; }
+
+.readout { display: flex; flex-direction: column; gap: 10px; }
+.readout .pair { display: flex; gap: 16px; }
+.readout .figure { display: block; }
+.readout .figure.hero { font-size: 34px; }
+
+/* ------------------------------------------------------------------- field */
+
+.field-wrap { padding: 26px 0; display: flex; justify-content: center; }
+.field { position: relative; }
+
+.field .ruler {
+  position: absolute;
+  left: -30px;
+  top: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  font: 400 9px var(--mono);
+  color: #3f4770;
+  letter-spacing: 1px;
+}
+
+.board-frame {
+  position: relative;
+  border: 1px solid var(--border);
+  background: var(--bg-deep);
+  padding: 8px;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, .55);
+}
+.board-frame canvas { display: block; }
+
+.field-caption {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 10px;
+  font: 400 9.5px var(--mono);
+  color: var(--dim);
+  letter-spacing: 1.5px;
+}
+
+/* ----------------------------------------------------------------- overlay */
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(10, 12, 24, .86);
+  backdrop-filter: blur(3px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  text-align: center;
+  padding: 24px;
+  z-index: 2;
+}
+.overlay.hidden { display: none; }
+.overlay h2 { font: 600 30px var(--cond); letter-spacing: 3px; text-transform: uppercase; }
+.overlay p { font: 400 12.5px var(--sans); color: var(--muted); max-width: 220px; }
+.overlay .btn { margin-top: 6px; }
+
+/* -------------------------------------------------------- shared side panels */
+
+.scores .line {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 7px 0;
+  border-bottom: 1px solid var(--rule);
+  font: 400 12px var(--sans);
+  color: var(--muted);
+}
+.scores .line:last-child { border-bottom: none; }
+.scores .line b { font-variant-numeric: tabular-nums; font-weight: 600; color: var(--text); }
+.scores .line.top span, .scores .line.top b { color: var(--accent); }
+
+.keys {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 8px 12px;
+  align-items: center;
+  font: 400 11.5px var(--sans);
+  color: var(--muted);
+}
+.keys kbd { justify-self: start; }
+.keys .combo { display: flex; gap: 3px; }
+
+/* --------------------------------------------------------------- responsive */
+
+@media (max-width: 1000px) {
+  .play { grid-template-columns: 1fr; }
+  .rail { min-height: 0; }
+  .rail.left, .rail.right { border: none; border-top: 1px solid var(--border); }
+  .rail.left { display: grid; grid-template-columns: repeat(3, 1fr); }
+  .rail.left section { border-bottom: none; border-right: 1px solid var(--border); }
+  .rail.left section:last-child { border-right: none; }
+  .field .ruler { display: none; }
+}
+
+@media (max-width: 720px) {
+  .board-frame canvas { width: 100%; height: auto; }
+  .field { width: 100%; }
+}
+
+@media (max-width: 620px) {
+  .rail.left { grid-template-columns: 1fr; }
+  .rail.left section { border-right: none; border-bottom: 1px solid var(--border); }
+}
