@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2048 — Arcade</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
+<link rel="stylesheet" href="assets/play.css">
+<link rel="stylesheet" href="assets/2048.css">
+</head>
+<body class="is-lit">
+
+<header class="site-header">
+  <div class="shell">
+    <div class="brand-block">
+      <a class="brand" href="index.html">ARCADE</a>
+      <span class="micro" id="sessionMeta">2048 / BUILD 1.0 / SESSION 00:00</span>
+    </div>
+    <nav class="site-nav" aria-label="Main">
+      <a href="index.html">Home</a>
+      <a href="games.html">Library</a>
+      <a href="2048.html" aria-current="page">Play</a>
+      <a href="profile.html">Profile</a>
+    </nav>
+  </div>
+</header>
+
+<main class="shell">
+  <div class="play">
+
+    <div class="rail left">
+      <section>
+        <span class="micro">Stats</span>
+        <div class="readout">
+          <div>
+            <div class="micro sm">Score</div>
+            <b class="figure hero" id="score" aria-live="polite">0</b>
+          </div>
+          <div class="pair">
+            <div><div class="micro sm">Moves</div><b class="figure sm" id="moves">0</b></div>
+            <div><div class="micro sm">Merges</div><b class="figure sm" id="merges">0</b></div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <span class="micro">To 2048</span>
+        <div class="bar"><span id="goalBar" style="width:0%"></span></div>
+        <div style="display:flex;justify-content:space-between;margin-top:7px" class="micro sm">
+          <span id="bestTile">Best tile 2</span><span id="goalPct">0%</span>
+        </div>
+      </section>
+
+      <section>
+        <span class="micro">Board</span>
+        <div class="board-facts">
+          <span>Free cells<b id="freeCells">14</b></span>
+          <span>Legal moves<b id="legalMoves">4</b></span>
+          <span>Merge pairs<b id="mergePairs">0</b></span>
+        </div>
+      </section>
+
+      <section>
+        <span class="micro">Tile scale</span>
+        <div class="tile-scale">
+          <span class="t-2">2</span>
+          <span class="t-8">8</span>
+          <span class="t-64">64</span>
+          <span class="t-256">256</span>
+          <span class="t-1024">1024</span>
+          <span class="t-2048">2048</span>
+        </div>
+      </section>
+    </div>
+
+    <div class="field-wrap">
+      <div class="field marks lg">
+        <i class="cm"></i>
+        <div class="ruler" aria-hidden="true"><span>R1</span><span>R2</span><span>R3</span><span>R4</span></div>
+        <div class="board-frame">
+          <div class="tile-grid" id="grid" role="grid" aria-label="2048 board"></div>
+          <div class="overlay hidden" id="overlay">
+            <h2 id="ovTitle">2048</h2>
+            <p id="ovMsg">Slide the tiles</p>
+            <button class="btn" id="startBtn" type="button">New game</button>
+          </div>
+        </div>
+        <div class="field-caption">
+          <span>Grid 4 × 4</span>
+          <span id="lastMove">Last move —</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="rail right">
+      <section>
+        <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px">
+          <span class="micro" style="margin:0">Move log</span>
+          <span class="micro sm accent" id="undoState">Undo ×1</span>
+        </div>
+        <div class="movelog" id="moveLog"></div>
+      </section>
+
+      <section class="scores">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px">
+          <span class="micro" style="margin:0">Top scores</span>
+          <span class="micro sm accent">This browser</span>
+        </div>
+        <div id="topScores"></div>
+      </section>
+
+      <section>
+        <span class="micro">Controls</span>
+        <div class="keys">
+          <span class="combo"><kbd>&larr;</kbd><kbd>&rarr;</kbd></span><span>Slide</span>
+          <span class="combo"><kbd>&uarr;</kbd><kbd>&darr;</kbd></span><span>Slide</span>
+          <kbd>W A S D</kbd><span>Same, left hand</span>
+          <kbd>U</kbd><span>Undo one move</span>
+          <kbd>R</kbd><span>New board</span>
+        </div>
+        <button class="btn block marks" id="newGameBtn" type="button" style="margin-top:16px">
+          New game<i class="cm"></i>
+        </button>
+      </section>
+    </div>
+
+  </div>
+</main>
+
+<footer class="site-footer">Arcade · scores are saved in this browser</footer>
+
+<script src="assets/catalog.js"></script>
+<script src="assets/stats.js"></script>
+<script src="assets/2048.js"></script>
+</body>
+</html>

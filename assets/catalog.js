@@ -42,10 +42,10 @@ window.Arcade.catalog = [
     id: "2048",
     name: "2048",
     icon: "🔢",
-    href: null,
-    status: "planned",
+    href: "2048.html",
+    status: "playable",
     genre: "Puzzle",
-    build: null,
+    build: "1.0",
     blurb: "Slide tiles, double them, run out of room.",
   },
   {

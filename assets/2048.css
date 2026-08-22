@@ -1,0 +1,68 @@
+/* 2048-only panels: the tile grid, tile scale key and move log. */
+
+.tile-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 104px);
+  grid-template-rows: repeat(4, 104px);
+  gap: 6px;
+  background: var(--bg-deep);
+}
+.tile-grid .cell {
+  display: grid;
+  place-items: center;
+  font: 600 34px var(--cond);
+  letter-spacing: 1px;
+  color: var(--text);
+}
+.tile-grid .cell.empty { border: 1px dashed var(--rule); }
+.tile-grid .cell.small { font-size: 26px; }   /* five-digit values keep their box */
+
+/* Tile ramp, straight off the mockup's scale key */
+.t-2,    .t-4    { background: #1a2138; color: #8b93b8; }
+.t-8,    .t-16,
+.t-32             { background: #233055; color: #a9b4d8; }
+.t-64,   .t-128  { background: #2f4a8f; color: var(--text); }
+.t-256,  .t-512  { background: var(--accent); color: #0b0d16; }
+.t-1024           { background: var(--violet); color: #0b0d16; }
+.t-2048, .t-max  { background: var(--pink); color: #0b0d16; }
+
+.tile-scale {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 6px;
+  font: 600 12px var(--cond);
+  letter-spacing: 1px;
+}
+.tile-scale span { padding: 6px; text-align: center; }
+
+.board-facts {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  font: 400 11.5px var(--sans);
+  color: var(--muted);
+}
+.board-facts span { display: flex; justify-content: space-between; gap: 10px; }
+.board-facts b { color: var(--text); font-variant-numeric: tabular-nums; font-weight: 600; }
+
+.movelog {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  font: 400 11px var(--mono);
+  color: var(--muted);
+  letter-spacing: .5px;
+  min-height: 76px;
+}
+.movelog b { color: var(--accent); font-weight: 400; }
+.movelog .idle { color: var(--dim); }
+
+@media (max-width: 720px) {
+  .tile-grid {
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+    width: min(434px, 100%);
+    aspect-ratio: 1;
+  }
+  .tile-grid .cell { font-size: 26px; }
+}
