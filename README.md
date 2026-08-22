@@ -1,3 +1,5 @@
+![Game Hub Screenshot](https://github.com/awakenedsniper78-beep/game-hub/blob/main/Screenshot%202026-08-22%20123131.png?raw=true)
+
 # Arcade
 
 Browser games. No build step, no dependencies, no accounts.
@@ -15,8 +17,6 @@ Open `index.html` and play — scores stay in your browser via `localStorage`.
 | 04 | 2048 | 🔜 Planned |
 | 05 | Minesweeper | 🔜 Planned |
 | 06 | Asteroids | 🔜 Planned |
-
-![Game Hub Screenshot](https://github.com/awakenedsniper78-beep/game-hub/blob/main/Screenshot%202026-08-22%20123131.png?raw=true)
 
 ## Run locally
 
