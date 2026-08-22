@@ -1,4 +1,3 @@
-![Game Hub Screenshot](https://github.com/awakenedsniper78-beep/game-hub/blob/main/Screenshot%202026-08-22%20123131.png?raw=true)
 [![Game Hub](https://github.com/awakenedsniper78-beep/game-hub/blob/main/Screenshot%202026-08-22%20123131.png?raw=true)](https://awakenedsniper78-beep.github.io/game-hub/)
 
 # Arcade
