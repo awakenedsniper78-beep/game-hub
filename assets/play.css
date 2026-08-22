@@ -1,10 +1,25 @@
 /* Shared play-screen chassis — the three-column instrument panel used by
-   every game (Tetris 1b, Snake 2a). Per-game panels live in <game>.css. */
+   every game (Tetris 1b, Snake 2a, Breakout 3a, 2048 3b).
+   Per-game panels live in <game>.css.
+
+   Play screens get a wider shell than the content pages: the rails stay at
+   their designed widths and the extra room all goes to the field, which then
+   scales to whatever the screen can show. Each game sets --field-min (its
+   original fixed size, so nothing ever renders smaller than it used to) and
+   a --field-max derived from its own aspect ratio.                          */
+
+body.is-play {
+  --shell-wide: min(1560px, 100vw - 24px);
+  --chrome: 280px;                          /* header, padding, caption, footer */
+  --field-h: max(var(--field-min, 440px), calc(100vh - var(--chrome)));
+}
+body.is-play .site-header > .shell,
+body.is-play main.shell { max-width: var(--shell-wide); }
 
 .play {
   display: grid;
-  grid-template-columns: 210px 1fr 250px;
-  align-items: start;
+  grid-template-columns: 210px minmax(0, 1fr) 250px;
+  align-items: stretch;             /* rail rules run the full height of the field */
 }
 
 .rail { min-height: 620px; }
@@ -21,8 +36,10 @@
 
 /* ------------------------------------------------------------------- field */
 
-.field-wrap { padding: 26px 0; display: flex; justify-content: center; }
-.field { position: relative; }
+/* flex-start keeps .field at its natural height so the bottom crop marks stay
+   pinned to the caption rather than to the stretched column. */
+.field-wrap { padding: 26px 0; display: flex; justify-content: center; align-items: flex-start; }
+.field { position: relative; width: 100%; max-width: var(--field-max, none); }
 
 .field .ruler {
   position: absolute;
@@ -44,7 +61,7 @@
   padding: 8px;
   box-shadow: 0 24px 70px rgba(0, 0, 0, .55);
 }
-.board-frame canvas { display: block; }
+.board-frame canvas { display: block; width: 100%; height: auto; }
 
 .field-caption {
   display: flex;
@@ -113,11 +130,6 @@
   .rail.left section { border-bottom: none; border-right: 1px solid var(--border); }
   .rail.left section:last-child { border-right: none; }
   .field .ruler { display: none; }
-}
-
-@media (max-width: 720px) {
-  .board-frame canvas { width: 100%; height: auto; }
-  .field { width: 100%; }
 }
 
 @media (max-width: 620px) {

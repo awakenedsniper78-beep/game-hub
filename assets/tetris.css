@@ -1,5 +1,11 @@
 /* Tetris-only panels. The three-column chassis lives in play.css. */
 
+/* Field scaling — the board is 240 x 480 logical units, so height is the
+   limiting dimension and the width is half of it. */
+body.is-play { --field-min: 516px; }   /* (240 canvas + 18 frame) x 2 */
+.field { --field-max: calc(var(--field-h) / 2); }
+#board { aspect-ratio: 240 / 480; }
+
 .slot-box {
   position: relative;
   border: 1px solid var(--border);

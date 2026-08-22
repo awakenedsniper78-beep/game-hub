@@ -1,6 +1,11 @@
 /* Breakout-only panels: lives pips, the power-up rack, the brick-value key
    and the rally log. The three-column chassis itself lives in play.css. */
 
+/* Field scaling — the field is 560 x 420 logical units, 4:3. */
+body.is-play { --field-min: 434px; }   /* (560 canvas + 18 frame) x 3/4 */
+.field { --field-max: calc(var(--field-h) * 4 / 3); }
+#board { aspect-ratio: 560 / 420; }
+
 .lives { display: flex; gap: 5px; }
 .lives i {
   display: block;
