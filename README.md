@@ -60,4 +60,4 @@ python -m http.server 8000
 3. Flip its entry in `assets/catalog.js` to `status: "playable"` with an `href`.
 
 The home page, library and profile all pick the change up automatically.
-
+![image alt]([image_url](https://github.com/awakenedsniper78-beep/game-hub/blob/main/Screenshot%202026-08-22%20123119.png?raw=true))
