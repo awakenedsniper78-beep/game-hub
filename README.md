@@ -15,8 +15,8 @@ Open `index.html` and play — scores stay in your browser via `localStorage`.
 | 02 | Snake | ✅ Playable |
 | 03 | Breakout | ✅ Playable |
 | 04 | 2048 | ✅ Playable |
-| 05 | Minesweeper | 🔜 Planned |
-| 06 | Asteroids | 🔜 Planned |
+| 05 | Minesweeper | ✅ Playable |
+| 06 | Asteroids | ✅ Playable |
 
 ## Run locally
 

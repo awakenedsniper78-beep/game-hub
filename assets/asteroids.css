@@ -1,0 +1,61 @@
+/* Asteroids-only panels: ship and hyperspace pips, and the rock-value key.
+   The log panel is shared, in play.css. */
+
+/* Field scaling — the field is 640 x 480 logical units, 4:3. */
+body.is-play { --field-min: 484px; }   /* (640 canvas + 18 frame) x 3/4 */
+.field { --field-max: calc(var(--field-h) * 4 / 3); }
+#board { aspect-ratio: 640 / 480; }
+
+/* Ships left, drawn as the same triangle the field uses. */
+.ship-pips { display: flex; gap: 7px; align-items: flex-end; }
+.ship-pips i {
+  display: block;
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-bottom: 15px solid var(--accent);
+}
+.ship-pips i.spent { border-bottom-color: var(--rule); }
+
+.charges { display: flex; gap: 5px; }
+.charges i {
+  display: block;
+  width: 14px;
+  height: 7px;
+  background: var(--violet);
+}
+.charges i.spent { background: none; box-shadow: inset 0 0 0 1px var(--rule); }
+
+.ship-row {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+}
+.ship-row > div { display: flex; flex-direction: column; gap: 7px; }
+
+.rock-key {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font: 400 11px var(--sans);
+  color: var(--muted);
+}
+.rock-key span { display: flex; align-items: center; gap: 10px; }
+.rock-key i {
+  flex: none;
+  display: block;
+  border: 1.5px solid var(--muted);
+  transform: rotate(12deg);
+}
+.rock-key .rock-lg { width: 20px; height: 20px; }
+.rock-key .rock-md { width: 13px; height: 13px; }
+.rock-key .rock-sm { width: 8px; height: 8px; }
+.rock-key b {
+  margin-left: auto;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--text);
+}
+.key-note { margin-top: 10px; line-height: 1.6; }

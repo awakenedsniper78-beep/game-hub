@@ -3,13 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Snake — Arcade</title>
+<title>Minesweeper — Arcade</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/site.css?v=20260822d">
 <link rel="stylesheet" href="assets/play.css?v=20260822d">
-<link rel="stylesheet" href="assets/snake.css?v=20260822d">
+<link rel="stylesheet" href="assets/minesweeper.css?v=20260822d">
 </head>
 <body class="is-lit is-play">
 
@@ -17,12 +17,12 @@
   <div class="shell">
     <div class="brand-block">
       <a class="brand" href="index.html">ARCADE</a>
-      <span class="micro" id="sessionMeta">SNAKE / BUILD 1.0 / SESSION 00:00</span>
+      <span class="micro" id="sessionMeta">MINESWEEPER / BUILD 1.0 / SESSION 00:00</span>
     </div>
     <nav class="site-nav" aria-label="Main">
       <a href="index.html">Home</a>
       <a href="games.html">Library</a>
-      <a href="snake.html" aria-current="page">Play</a>
+      <a href="minesweeper.html" aria-current="page">Play</a>
       <a href="profile.html">Profile</a>
     </nav>
   </div>
@@ -40,63 +40,64 @@
             <b class="figure hero" id="score" aria-live="polite">0</b>
           </div>
           <div class="pair">
-            <div><div class="micro sm">Length</div><b class="figure sm" id="length">4</b></div>
-            <div><div class="micro sm">Apples</div><b class="figure sm" id="apples">0</b></div>
+            <div><div class="micro sm">Mines left</div><b class="figure sm" id="minesLeft">40</b></div>
+            <div><div class="micro sm">Time</div><b class="figure sm" id="time">00:00</b></div>
           </div>
         </div>
       </section>
 
       <section>
-        <span class="micro" id="tierLabel">Speed tier 01</span>
-        <div class="bar"><span id="tierBar" style="width:0%"></span></div>
+        <span class="micro">Cells cleared</span>
+        <div class="bar"><span id="clearBar" style="width:0%"></span></div>
         <div style="display:flex;justify-content:space-between;margin-top:7px" class="micro sm">
-          <span id="tierToGo">5 apples to tier 02</span><span id="tierMs">180ms</span>
+          <span id="clearCount">0 of 216</span><span id="clearPct">0%</span>
         </div>
       </section>
 
       <section>
-        <span class="micro">Mode</span>
-        <div class="modes" id="modes" role="group" aria-label="Game mode">
-          <button type="button" data-mode="classic" aria-pressed="true">Classic walls</button>
-          <button type="button" data-mode="wrap" aria-pressed="false">Wrap edges</button>
-          <button type="button" data-mode="nobrakes" aria-pressed="false">No brakes</button>
+        <span class="micro">Difficulty</span>
+        <div class="modes" id="modes" role="group" aria-label="Difficulty">
+          <button type="button" data-mode="beginner" aria-pressed="false">Beginner</button>
+          <button type="button" data-mode="standard" aria-pressed="true">Standard</button>
+          <button type="button" data-mode="expert" aria-pressed="false">Expert</button>
         </div>
-        <p class="micro sm mode-note" id="modeNote">Walls are fatal.</p>
+        <p class="micro sm mode-note" id="modeNote">16 × 16, 40 mines. The usual game.</p>
       </section>
 
       <section>
-        <span class="micro">Legend</span>
-        <div class="legend">
-          <span><i class="swatch-head"></i>Head</span>
-          <span><i class="swatch-body"></i>Body</span>
-          <span><i class="swatch-apple"></i>Apple</span>
+        <span class="micro">Number key</span>
+        <div class="num-key">
+          <span class="n1">1</span><span class="n2">2</span><span class="n3">3</span><span class="n4">4</span>
+          <span class="n5">5</span><span class="n6">6</span><span class="n7">7</span><span class="n8">8</span>
         </div>
+        <p class="micro sm key-note">Each number counts the mines touching that cell.
+          Clicking a satisfied number opens the rest of its neighbours.</p>
       </section>
     </div>
 
     <div class="field-wrap">
       <div class="field marks lg">
         <i class="cm"></i>
-        <div class="ruler" aria-hidden="true"><span>20</span><span>15</span><span>10</span><span>05</span><span>00</span></div>
+        <div class="ruler" aria-hidden="true"><span>N</span><span>W</span><span>+</span><span>E</span><span>S</span></div>
         <div class="board-frame">
-          <canvas id="board" width="440" height="440" aria-label="Snake field" role="img"></canvas>
+          <div class="mine-grid" id="grid" role="grid" aria-label="Minesweeper board"></div>
           <div class="overlay" id="overlay">
-            <h2 id="ovTitle">Snake</h2>
-            <p id="ovMsg">Press Start or hit Enter</p>
+            <h2 id="ovTitle">Minesweeper</h2>
+            <p id="ovMsg">Click any cell to open the board</p>
             <button class="btn" id="startBtn" type="button">Start</button>
           </div>
         </div>
         <div class="field-caption">
-          <span>Field 20 × 20</span>
-          <span id="tickMeta">Tick 180ms · heading E</span>
+          <span id="boardMeta">Grid 16 × 16 · 40 mines</span>
+          <span id="flagMeta">Flags 0 / 40</span>
         </div>
       </div>
     </div>
 
     <div class="rail right">
       <section>
-        <span class="micro">Run log</span>
-        <div class="runlog" id="runLog"></div>
+        <span class="micro">Sweep log</span>
+        <div class="gamelog" id="sweepLog"></div>
       </section>
 
       <section class="scores">
@@ -110,14 +111,14 @@
       <section>
         <span class="micro">Controls</span>
         <div class="keys">
-          <span class="combo"><kbd>&larr;</kbd><kbd>&rarr;</kbd></span><span>Turn</span>
-          <span class="combo"><kbd>&uarr;</kbd><kbd>&darr;</kbd></span><span>Turn</span>
-          <kbd>W A S D</kbd><span>Same, left hand</span>
-          <kbd>Shift</kbd><span>Sprint</span>
-          <kbd>P</kbd><span>Pause</span>
+          <kbd>Click</kbd><span>Open a cell</span>
+          <kbd>Right click</kbd><span>Flag a mine</span>
+          <kbd>F</kbd><span>Flag the focused cell</span>
+          <span class="combo"><kbd>&larr;</kbd><kbd>&rarr;</kbd><kbd>&uarr;</kbd><kbd>&darr;</kbd></span><span>Move focus</span>
+          <kbd>R</kbd><span>New board</span>
         </div>
-        <button class="btn block marks" id="pauseBtn" type="button" style="margin-top:16px">
-          Pause<i class="cm"></i>
+        <button class="btn block marks" id="newGameBtn" type="button" style="margin-top:16px">
+          New board<i class="cm"></i>
         </button>
       </section>
     </div>
@@ -129,7 +130,6 @@
 
 <script src="assets/catalog.js?v=20260822d"></script>
 <script src="assets/stats.js?v=20260822d"></script>
-<script src="assets/fit.js?v=20260822d"></script>
-<script src="assets/snake.js?v=20260822d"></script>
+<script src="assets/minesweeper.js?v=20260822d"></script>
 </body>
 </html>
