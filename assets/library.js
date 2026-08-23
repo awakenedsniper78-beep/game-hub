@@ -26,27 +26,39 @@
   }
 
   // ---------- recently played ----------
-  function renderRecent() {
-    const recent = stats.recent(4);
-    const cells = recent.map(run => {
-      const game = window.Arcade.byId(run.game);
-      if (!game) return "";
-      return `
+  const SLOTS = 4;
+
+  function recentCell(game, meta, className = "") {
+    return `
+      <div${className ? ` class="${className}"` : ""}>
+        <div class="chip" aria-hidden="true">${game ? game.icon : ""}</div>
         <div>
-          <div class="chip" aria-hidden="true">${game.icon}</div>
-          <div>
-            <div class="name">${esc(game.name)}</div>
-            <div class="micro sm">${stats.ago(run.ts)} · ${stats.num(run.score)}</div>
-          </div>
-        </div>`;
-    });
-    while (cells.length < 4) {
-      cells.push(`
-        <div class="slot">
-          <div class="chip" aria-hidden="true"></div>
-          <div class="micro sm">Slot empty</div>
-        </div>`);
+          ${game ? `<div class="name">${esc(game.name)}</div>` : ""}
+          <div class="micro sm">${meta}</div>
+        </div>
+      </div>`;
+  }
+
+  /* The strip is the last four runs, so replaying one title fills more than a
+     single slot. Anything left over suggests a title not played yet rather
+     than sitting empty. */
+  function renderRecent() {
+    const cells = [];
+    for (const run of stats.recentRuns(SLOTS)) {
+      const game = window.Arcade.byId(run.game);
+      if (game) cells.push(recentCell(game, `${stats.ago(run.ts)} · ${stats.num(run.score)}`));
     }
+
+    if (cells.length < SLOTS) {
+      const played = new Set(stats.all().map(r => r.game));
+      const untried = catalog.filter(g => g.status === "playable" && !played.has(g.id));
+      for (const game of untried) {
+        if (cells.length >= SLOTS) break;
+        cells.push(recentCell(game, "Never played", "suggest"));
+      }
+    }
+    while (cells.length < SLOTS) cells.push(recentCell(null, "Slot empty", "slot"));
+
     strip.innerHTML = cells.join("");
   }
 

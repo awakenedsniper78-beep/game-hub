@@ -76,6 +76,9 @@
 }
 .recent-strip .slot { opacity: .5; }
 .recent-strip .slot .chip { border-style: dashed; }
+.recent-strip .suggest { opacity: .62; }
+.recent-strip .suggest .chip { border-style: dashed; }
+.recent-strip .suggest .name { color: var(--muted); }
 .recent-strip .name {
   font: 600 13px var(--cond);
   letter-spacing: 1.2px;
