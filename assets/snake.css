@@ -1,33 +1,9 @@
-/* Snake-only panels: mode picker, legend and the run log. */
+/* Snake-only panels: legend and the run log. The mode picker is shared, in play.css. */
 
 /* Field scaling — the 20 x 20 field is square. */
 body.is-play { --field-min: 458px; }   /* 440 canvas + 18 frame */
 .field { --field-max: var(--field-h); }
 #board { aspect-ratio: 1; }
-
-.modes {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-.modes button {
-  padding: 8px 11px;
-  border: 1px solid var(--border);
-  background: none;
-  color: var(--muted);
-  font: 500 10.5px var(--sans);
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  text-align: left;
-  cursor: pointer;
-}
-.modes button:hover { color: var(--text); }
-.modes button[aria-pressed="true"] {
-  border-color: var(--accent);
-  background: rgba(79, 124, 255, .16);
-  color: var(--text);
-}
-.mode-note { margin-top: 8px; line-height: 1.6; }
 
 .legend {
   display: flex;

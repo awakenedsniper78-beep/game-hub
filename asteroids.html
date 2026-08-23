@@ -3,13 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Breakout — Arcade</title>
+<title>Asteroids — Arcade</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/site.css?v=20260822d">
 <link rel="stylesheet" href="assets/play.css?v=20260822d">
-<link rel="stylesheet" href="assets/breakout.css?v=20260822d">
+<link rel="stylesheet" href="assets/asteroids.css?v=20260822d">
 </head>
 <body class="is-lit is-play">
 
@@ -17,12 +17,12 @@
   <div class="shell">
     <div class="brand-block">
       <a class="brand" href="index.html">ARCADE</a>
-      <span class="micro" id="sessionMeta">BREAKOUT / BUILD 1.0 / SESSION 00:00</span>
+      <span class="micro" id="sessionMeta">ASTEROIDS / BUILD 1.0 / SESSION 00:00</span>
     </div>
     <nav class="site-nav" aria-label="Main">
       <a href="index.html">Home</a>
       <a href="games.html">Library</a>
-      <a href="breakout.html" aria-current="page">Play</a>
+      <a href="asteroids.html" aria-current="page">Play</a>
       <a href="profile.html">Profile</a>
     </nav>
   </div>
@@ -40,44 +40,43 @@
             <b class="figure hero" id="score" aria-live="polite">0</b>
           </div>
           <div class="pair">
-            <div><div class="micro sm">Stage</div><b class="figure sm" id="stage">01</b></div>
-            <div><div class="micro sm">Combo</div><b class="figure sm" id="combo">×1</b></div>
+            <div><div class="micro sm">Wave</div><b class="figure sm" id="wave">01</b></div>
+            <div><div class="micro sm">Rocks</div><b class="figure sm" id="rocks">4</b></div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <span class="micro">Wave cleared</span>
+        <div class="bar"><span id="waveBar" style="width:0%"></span></div>
+        <div style="display:flex;justify-content:space-between;margin-top:7px" class="micro sm">
+          <span id="waveCount">0 of 28</span><span id="wavePct">0%</span>
+        </div>
+      </section>
+
+      <section>
+        <span class="micro">Ship</span>
+        <div class="ship-row">
+          <div>
+            <span class="micro sm">Ships left</span>
+            <div class="ship-pips" id="lives" aria-label="Ships remaining"><i></i><i></i><i></i></div>
           </div>
           <div>
-            <div class="micro sm">Lives</div>
-            <div class="lives" id="lives" aria-label="Lives remaining"><i></i><i></i><i></i></div>
+            <span class="micro sm">Hyperspace</span>
+            <div class="charges" id="hyper" aria-label="Hyperspace charges"><i></i><i></i><i></i></div>
           </div>
         </div>
       </section>
 
       <section>
-        <span class="micro">Bricks cleared</span>
-        <div class="bar"><span id="brickBar" style="width:0%"></span></div>
-        <div style="display:flex;justify-content:space-between;margin-top:7px" class="micro sm">
-          <span id="brickCount">0 of 48</span><span id="brickPct">0%</span>
+        <span class="micro">Rock values</span>
+        <div class="rock-key">
+          <span><i class="rock-lg"></i>Large<b>20</b></span>
+          <span><i class="rock-md"></i>Medium<b>50</b></span>
+          <span><i class="rock-sm"></i>Small<b>100</b></span>
         </div>
-      </section>
-
-      <section>
-        <span class="micro">Power-ups</span>
-        <div class="powers" id="powers">
-          <div class="pw pw-wide" data-power="wide"><i>W</i>Wide paddle<b>12s</b></div>
-          <div class="pw pw-slow" data-power="slow"><i>S</i>Slow ball<b>10s</b></div>
-          <div class="pw pw-multi" data-power="multi"><i>M</i>Multiball<b>×0</b></div>
-          <div class="pw pw-life" data-power="life"><i>E</i>Extra life<b>×0</b></div>
-        </div>
-      </section>
-
-      <section>
-        <span class="micro">Brick values</span>
-        <div class="brick-key">
-          <span><i class="swatch-90"></i>Reinforced<b>90</b></span>
-          <span><i class="swatch-70"></i>Row 2<b>70</b></span>
-          <span><i class="swatch-50"></i>Row 3<b>50</b></span>
-          <span><i class="swatch-30"></i>Row 4<b>30</b></span>
-        </div>
-        <p class="micro sm key-note">Reinforced bricks take two hits. The combo rises with every brick
-          broken before the ball comes back.</p>
+        <p class="micro sm key-note">Large rocks split into two medium, and each of those into two small.
+          An extra ship every 5,000 points.</p>
       </section>
     </div>
 
@@ -86,24 +85,24 @@
         <i class="cm"></i>
         <div class="ruler" aria-hidden="true"><span>04</span><span>03</span><span>02</span><span>01</span><span>00</span></div>
         <div class="board-frame">
-          <canvas id="board" width="560" height="420" aria-label="Breakout field" role="img"></canvas>
+          <canvas id="board" width="640" height="480" aria-label="Asteroids field" role="img"></canvas>
           <div class="overlay" id="overlay">
-            <h2 id="ovTitle">Breakout</h2>
+            <h2 id="ovTitle">Asteroids</h2>
             <p id="ovMsg">Press Start or hit Enter</p>
             <button class="btn" id="startBtn" type="button">Start</button>
           </div>
         </div>
         <div class="field-caption">
-          <span>Wall 12 × 4 · 48 bricks</span>
-          <span id="ballMeta">Ball 300px/s · 1 in play</span>
+          <span>Field 640 × 480 · edges wrap</span>
+          <span id="flightMeta">Drift 0px/s · 4 rocks</span>
         </div>
       </div>
     </div>
 
     <div class="rail right">
       <section>
-        <span class="micro">Rally log</span>
-        <div class="rallylog" id="rallyLog"></div>
+        <span class="micro">Flight log</span>
+        <div class="gamelog" id="flightLog"></div>
       </section>
 
       <section class="scores">
@@ -117,10 +116,11 @@
       <section>
         <span class="micro">Controls</span>
         <div class="keys">
-          <span class="combo"><kbd>&larr;</kbd><kbd>&rarr;</kbd></span><span>Move paddle</span>
-          <kbd>A D</kbd><span>Same, left hand</span>
-          <kbd>Mouse</kbd><span>Steer along the field</span>
-          <kbd>Space</kbd><span>Serve the ball</span>
+          <span class="combo"><kbd>&larr;</kbd><kbd>&rarr;</kbd></span><span>Rotate</span>
+          <kbd>&uarr;</kbd><span>Thrust</span>
+          <kbd>W A D</kbd><span>Same, left hand</span>
+          <kbd>Space</kbd><span>Fire</span>
+          <kbd>Shift</kbd><span>Hyperspace</span>
           <kbd>P</kbd><span>Pause</span>
         </div>
         <button class="btn block marks" id="pauseBtn" type="button" style="margin-top:16px">
@@ -137,6 +137,6 @@
 <script src="assets/catalog.js?v=20260822d"></script>
 <script src="assets/stats.js?v=20260822d"></script>
 <script src="assets/fit.js?v=20260822d"></script>
-<script src="assets/breakout.js?v=20260822d"></script>
+<script src="assets/asteroids.js?v=20260822d"></script>
 </body>
 </html>
