@@ -53,13 +53,9 @@ window.Arcade.stats = (() => {
     return runsFor(game).reduce((top, r) => (!top || r.score > top.score ? r : top), null);
   }
 
-  /** Most recent run per title, newest first. */
-  function recent(limit = 4) {
-    const seen = new Map();
-    for (const r of load().sort((a, b) => b.ts - a.ts)) {
-      if (!seen.has(r.game)) seen.set(r.game, r);
-    }
-    return [...seen.values()].slice(0, limit);
+  /** The last N runs, newest first. A title repeats if it was played twice. */
+  function recentRuns(limit = 4) {
+    return load().sort((a, b) => b.ts - a.ts).slice(0, limit);
   }
 
   /** Top runs across every title, newest-first tiebreak. */
@@ -120,7 +116,7 @@ window.Arcade.stats = (() => {
   }
 
   return {
-    record, best, recent, topRuns, totals, streak, lastScores,
+    record, best, recentRuns, topRuns, totals, streak, lastScores,
     playsThisWeek, clear, all: load, num, ago, duration,
   };
 })();
