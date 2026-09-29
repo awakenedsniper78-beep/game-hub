@@ -13,21 +13,21 @@
   byId("streak").textContent = stats.streak();
   byId("timePlayed").textContent = totals.timeMs ? stats.duration(totals.timeMs) : "0m";
   byId("totalScore").textContent = stats.num(totals.score);
-  byId("gamesPlayed").textContent = stats.num(totals.games);
+  byId("gusPlayed").textContent = stats.num(totals.gus);
   byId("linesCleared").textContent = stats.num(totals.lines);
   byId("bestLevel").textContent = totals.bestLevel || "—";
 
   byId("sessionLine").textContent = totals.first
-    ? `Saved in this browser · ${totals.games} session${totals.games === 1 ? "" : "s"} since ` +
+    ? `Saved in this browser · ${totals.gus} session${totals.gus === 1 ? "" : "s"} since ` +
       new Date(totals.first).toLocaleDateString("en-US", { month: "long", year: "numeric" })
     : "Saved in this browser · no sessions yet";
 
   // ---------- personal bests ----------
-  const rows = catalog.map(game => {
-    const best = stats.best(game.id);
-    const count = runs.filter(r => r.game === game.id).length;
+  const rows = catalog.map(gus => {
+    const best = stats.best(gus.id);
+    const count = runs.filter(r => r.gus === gus.id).length;
     return `<div class="${best ? "" : "off"}">
-        <span class="cell nm">${esc(game.name)}</span>
+        <span class="cell nm">${esc(gus.name)}</span>
         <span class="cell val">${best ? stats.num(best.score) : "—"}</span>
         <span class="cell rank">${count || "N/A"}</span>
       </div>`;

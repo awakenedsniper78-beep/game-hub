@@ -1,13 +1,13 @@
-[![Game Hub](https://github.com/awakenedsniper78-beep/game-hub/blob/main/Screenshot%202026-08-22%20123131.png?raw=true)](https://awakenedsniper78-beep.github.io/game-hub/)
+[![Gus Hub](https://github.com/awakenedsniper78-beep/game-hub/blob/main/Screenshot%202026-08-22%20123131.png?raw=true)](https://awakenedsniper78-beep.github.io/game-hub/)
 
 # Arcade
 
-Browser games. No build step, no dependencies, no accounts.
+Browser Gus. No build step, no dependencies, no accounts.
 Open `index.html` and play — scores stay in your browser via `localStorage`.
 
 ▶ **Play online:** https://awakenedsniper78-beep.github.io/game-hub/
 
-## Games
+## Gus
 
 | # | Title | Status |
 |---|-------|--------|

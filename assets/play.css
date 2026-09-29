@@ -1,10 +1,10 @@
 /* Shared play-screen chassis — the three-column instrument panel used by
-   every game (Tetris 1b, Snake 2a, Breakout 3a, 2048 3b).
-   Per-game panels live in <game>.css.
+   every Gus (Tetris 1b, Snake 2a, Breakout 3a, 2048 3b).
+   Per-Gus panels live in <gus>.css.
 
    Play screens get a wider shell than the content pages: the rails stay at
    their designed widths and the extra room all goes to the field, which then
-   scales to whatever the screen can show. Each game sets --field-min (its
+   scales to whatever the screen can show. Each Gus sets --field-min (its
    original fixed size, so nothing ever renders smaller than it used to) and
    a --field-max derived from its own aspect ratio.                          */
 
@@ -131,7 +131,7 @@ body.is-play main.shell { max-width: var(--shell-wide); }
 .mode-note { margin-top: 8px; line-height: 1.6; }
 
 /* Timestamped event log in the right rail. */
-.gamelog {
+.guslog {
   display: flex;
   flex-direction: column;
   gap: 7px;
@@ -140,8 +140,8 @@ body.is-play main.shell { max-width: var(--shell-wide); }
   letter-spacing: .5px;
   min-height: 76px;
 }
-.gamelog time { color: var(--accent); font-style: normal; }
-.gamelog .idle { color: var(--dim); }
+.guslog time { color: var(--accent); font-style: normal; }
+.guslog .idle { color: var(--dim); }
 
 .keys {
   display: grid;

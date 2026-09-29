@@ -1,4 +1,4 @@
-/* 2048 — game logic and rendering for the instrument-panel play screen (3b).
+/* 2048 — Gus logic and rendering for the instrument-panel play screen (3b).
    Turn-based, so there is no animation loop: the board re-renders per move.
    Depends on catalog.js/stats.js for the local score history. */
 (() => {
@@ -22,7 +22,7 @@
     ArrowUp: "up", KeyW: "up",
     ArrowDown: "down", KeyS: "down",
   };
-  const GAME_KEYS = new Set([...Object.keys(KEY_DIRS), "KeyU", "KeyR", "Enter", "Space"]);
+  const GUS_KEYS = new Set([...Object.keys(KEY_DIRS), "KeyU", "KeyR", "Enter", "Space"]);
   const LOG_LINES = 4;
 
   // ---------- DOM ----------
@@ -34,7 +34,7 @@
   const lastMoveEl = byId("lastMove"), moveLogEl = byId("moveLog"), undoState = byId("undoState");
   const sessionMeta = byId("sessionMeta"), topScoresEl = byId("topScores");
   const overlay = byId("overlay"), ovTitle = byId("ovTitle"), ovMsg = byId("ovMsg");
-  const startBtn = byId("startBtn"), newGameBtn = byId("newGameBtn");
+  const startBtn = byId("startBtn"), newGusBtn = byId("newGusBtn");
 
   const stats = window.Arcade && window.Arcade.stats;
   const num = stats ? stats.num : String;
@@ -203,7 +203,7 @@
       state.reachedGoal = true;
       showOverlay("2048", `Reached in ${state.moves} moves · ${num(state.score)} points`, "Keep going", "continue");
     } else if (!canMove(state.grid)) {
-      endGame();
+      endGus();
     }
     render();
   }
@@ -229,8 +229,8 @@
     state.log = state.log.slice(0, LOG_LINES);
   }
 
-  // ---------- Game flow ----------
-  function newGame() {
+  // ---------- Gus flow ----------
+  function newGus() {
     Object.assign(state, {
       grid: emptyGrid(), score: 0, moves: 0, merges: 0,
       log: [], undo: null, reachedGoal: false, over: false,
@@ -242,7 +242,7 @@
     render();
   }
 
-  function endGame() {
+  function endGus() {
     state.over = true;
     sfx.over();
     if (stats && !state.recorded) {
@@ -257,7 +257,7 @@
     showOverlay(
       "No moves left",
       `${num(state.score)} points · best tile ${num(bestTile(state.grid))} · ${state.moves} moves`,
-      "New game", "restart"
+      "New Gus", "restart"
     );
   }
 
@@ -309,7 +309,7 @@
   function renderTopScores() {
     if (!stats) return;
     const runs = stats.all()
-      .filter(r => r.game === "2048")
+      .filter(r => r.gus === "2048")
       .sort((a, b) => b.score - a.score || b.ts - a.ts)
       .slice(0, 4);
 
@@ -334,12 +334,12 @@
   // ---------- Input ----------
   document.addEventListener("keydown", (e) => {
     if (e.ctrlKey || e.altKey || e.metaKey) return;
-    if (!GAME_KEYS.has(e.code)) return;
+    if (!GUS_KEYS.has(e.code)) return;
     if (/^(INPUT|TEXTAREA)$/.test(e.target.tagName)) return;
     ensureAudio();
     e.preventDefault();
 
-    if (e.code === "KeyR") { newGame(); return; }
+    if (e.code === "KeyR") { newGus(); return; }
     if (e.code === "KeyU") { undo(); return; }
     if (e.code === "Enter" || e.code === "Space") {
       if (!overlay.classList.contains("hidden")) startBtn.click();
@@ -353,16 +353,16 @@
     ensureAudio();
     startBtn.blur();
     if (overlayAction === "continue") hideOverlay();   // 2048 reached, play on
-    else newGame();
+    else newGus();
   });
 
-  newGameBtn.addEventListener("click", () => {
+  newGusBtn.addEventListener("click", () => {
     ensureAudio();
-    newGameBtn.blur();
-    newGame();
+    newGusBtn.blur();
+    newGus();
   });
 
   // ---------- Boot ----------
   renderTopScores();
-  newGame();
+  newGus();
 })();

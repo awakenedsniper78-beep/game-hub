@@ -1,4 +1,4 @@
-/* Minesweeper — game logic for the instrument-panel play screen.
+/* Minesweeper — Gus logic for the instrument-panel play screen.
    The board is DOM rather than canvas: every cell is a real button, so focus,
    keyboard play and screen readers all work without extra machinery.
    Depends on catalog.js/stats.js for the local score history.               */
@@ -9,7 +9,7 @@
     beginner: { label: "Beginner", cols: 9,  rows: 9,  mines: 10, level: 1,
                 note: "9 × 9, 10 mines. Room to learn the patterns." },
     standard: { label: "Standard", cols: 16, rows: 16, mines: 40, level: 2,
-                note: "16 × 16, 40 mines. The usual game." },
+                note: "16 × 16, 40 mines. The usual Gus." },
     expert:   { label: "Expert",   cols: 20, rows: 20, mines: 80, level: 3,
                 note: "20 × 20, 80 mines. One in five is live." },
   };
@@ -28,7 +28,7 @@
   const boardMeta = byId("boardMeta"), flagMeta = byId("flagMeta"), sessionMeta = byId("sessionMeta");
   const sweepLogEl = byId("sweepLog"), topScoresEl = byId("topScores");
   const overlay = byId("overlay"), ovTitle = byId("ovTitle"), ovMsg = byId("ovMsg");
-  const startBtn = byId("startBtn"), newGameBtn = byId("newGameBtn");
+  const startBtn = byId("startBtn"), newGusBtn = byId("newGusBtn");
 
   const stats = window.Arcade && window.Arcade.stats;
   const num = stats ? stats.num : String;
@@ -70,7 +70,7 @@
   const state = {
     mode: "standard", cells: [], cols: 0, rows: 0, mines: 0,
     seeded: false, revealed: 0, flags: 0, score: 0,
-    running: false, gameOver: false, won: false,
+    running: false, gusOver: false, won: false,
     startedAt: 0, elapsedMs: 0, timer: 0, focus: 0, log: [],
   };
 
@@ -137,7 +137,7 @@
   function renderTopScores() {
     if (!stats) return;
     const runs = stats.all()
-      .filter(r => r.game === "minesweeper")
+      .filter(r => r.gus === "minesweeper")
       .sort((a, b) => b.score - a.score || b.ts - a.ts)
       .slice(0, 4);
 
@@ -267,7 +267,7 @@
   }
 
   function clickCell(i) {
-    if (state.gameOver) return;
+    if (state.gusOver) return;
     const cell = state.cells[i];
 
     if (!state.seeded) {
@@ -283,7 +283,7 @@
 
     if (cell.mine) {
       cell.blown = true;
-      return endGame(false);
+      return endGus(false);
     }
 
     const opened = reveal(i);
@@ -291,7 +291,7 @@
     else if (opened) sfx.reveal();
 
     updateStats();
-    if (state.revealed >= safeCells()) endGame(true);
+    if (state.revealed >= safeCells()) endGus(true);
   }
 
   /** Clicking a satisfied number opens its unflagged neighbours. */
@@ -308,18 +308,18 @@
     if (hits.some(n => state.cells[n].mine)) {
       for (const n of hits) if (state.cells[n].mine) state.cells[n].blown = true;
       log("CHORD HIT A MINE");
-      return endGame(false);
+      return endGus(false);
     }
     let opened = 0;
     for (const n of hits) opened += reveal(n);
     if (opened) { sfx.sweep(); log(`CHORD · ${cellWord(opened)} · +${num(opened * POINTS_PER_CELL)}`); }
 
     updateStats();
-    if (state.revealed >= safeCells()) endGame(true);
+    if (state.revealed >= safeCells()) endGus(true);
   }
 
   function toggleFlag(i) {
-    if (state.gameOver) return;
+    if (state.gusOver) return;
     const cell = state.cells[i];
     if (cell.revealed) return;
     if (!state.seeded) { state.running = true; startTimer(); hideOverlay(); }
@@ -331,8 +331,8 @@
     updateStats();
   }
 
-  function endGame(won) {
-    state.gameOver = true;
+  function endGus(won) {
+    state.gusOver = true;
     state.running = false;
     state.won = won;
     if (state.startedAt) state.elapsedMs = Date.now() - state.startedAt;
@@ -381,11 +381,11 @@
     );
   }
 
-  function newGame() {
+  function newGus() {
     stopTimer();
     Object.assign(state, {
       score: 0, revealed: 0, flags: 0, elapsedMs: 0,
-      running: false, gameOver: false, won: false, seeded: false, log: [],
+      running: false, gusOver: false, won: false, seeded: false, log: [],
     });
     buildBoard();
     for (let i = 0; i < total(); i++) paint(i);
@@ -459,30 +459,30 @@
   document.addEventListener("keydown", (e) => {
     if (e.ctrlKey || e.altKey || e.metaKey) return;
     if (/^(INPUT|TEXTAREA)$/.test(e.target.tagName)) return;
-    if (e.key === "r" || e.key === "R") { ensureAudio(); newGame(); }
+    if (e.key === "r" || e.key === "R") { ensureAudio(); newGus(); }
   });
 
   modesEl.addEventListener("click", (e) => {
     const button = e.target.closest("button[data-mode]");
     if (!button) return;
     state.mode = button.dataset.mode;
-    newGame();
+    newGus();
   });
 
   startBtn.addEventListener("click", () => {
     ensureAudio();
     startBtn.blur();
-    if (state.gameOver || !state.seeded) newGame();
+    if (state.gusOver || !state.seeded) newGus();
     hideOverlay();
   });
 
-  newGameBtn.addEventListener("click", () => {
+  newGusBtn.addEventListener("click", () => {
     ensureAudio();
-    newGameBtn.blur();
-    newGame();
+    newGusBtn.blur();
+    newGus();
   });
 
   // ---------- Boot ----------
-  newGame();
+  newGus();
   renderTopScores();
 })();

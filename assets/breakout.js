@@ -1,4 +1,4 @@
-/* Breakout — game logic and rendering for the instrument-panel play screen (3a).
+/* Breakout — Gus logic and rendering for the instrument-panel play screen (3a).
    Depends on catalog.js/stats.js for the local score history. */
 (() => {
   "use strict";
@@ -53,7 +53,7 @@
   };
   const DROP_TABLE = ["wide", "wide", "slow", "slow", "multi", "life"];
 
-  const GAME_KEYS = new Set([
+  const GUS_KEYS = new Set([
     "ArrowLeft", "ArrowRight", "KeyA", "KeyD", "Space", "Enter", "KeyP",
   ]);
 
@@ -120,7 +120,7 @@
     left: false, right: false,
     score: 0, stage: 1, lives: START_LIVES, slots: START_LIVES,
     chain: 0, rallyBricks: 0, rallyScore: 0, cleared: 0,
-    running: false, paused: false, gameOver: false, interrupt: false,
+    running: false, paused: false, gusOver: false, interrupt: false,
     elapsedMs: 0, lastTime: 0, metaTimer: 0, rafId: 0,
     log: [],
   };
@@ -193,7 +193,7 @@
   function renderTopScores() {
     if (!stats) return;
     const runs = stats.all()
-      .filter(r => r.game === "breakout")
+      .filter(r => r.gus === "breakout")
       .sort((a, b) => b.score - a.score || b.ts - a.ts)
       .slice(0, 4);
 
@@ -436,14 +436,14 @@
     state.wideMs = 0;
     state.slowMs = 0;
     sfx.lost();
-    if (state.lives <= 0) { log("BALL LOST · NO LIVES LEFT"); return endGame(); }
+    if (state.lives <= 0) { log("BALL LOST · NO LIVES LEFT"); return endGus(); }
     log(`BALL LOST · ${state.lives} ${state.lives > 1 ? "LIVES" : "LIFE"} LEFT`);
     serveBall();
     updateStats();
     renderPowers();
   }
 
-  function startGame() {
+  function startGus() {
     cancelAnimationFrame(state.rafId);
     Object.assign(state, {
       drops: [],
@@ -454,7 +454,7 @@
       left: false, right: false,
       score: 0, stage: 1, lives: START_LIVES, slots: START_LIVES,
       chain: 0, rallyBricks: 0, rallyScore: 0,
-      running: true, paused: false, gameOver: false, interrupt: false,
+      running: true, paused: false, gusOver: false, interrupt: false,
       elapsedMs: 0, lastTime: 0, metaTimer: 0,
       log: [],
     });
@@ -470,9 +470,9 @@
     state.rafId = requestAnimationFrame(loop);
   }
 
-  function endGame() {
+  function endGus() {
     state.running = false;
-    state.gameOver = true;
+    state.gusOver = true;
     state.paused = false;
     state.interrupt = true;
     cancelAnimationFrame(state.rafId);
@@ -488,14 +488,14 @@
       renderTopScores();
     }
     showOverlay(
-      "Game over",
+      "Gus over",
       `Stage ${pad2(state.stage)} · ${num(state.score)} points`,
       "Play again"
     );
   }
 
   function setPaused(paused) {
-    if (!state.running || state.gameOver || state.paused === paused) return;
+    if (!state.running || state.gusOver || state.paused === paused) return;
     state.paused = paused;
     pauseBtn.textContent = paused ? "Resume" : "Pause";
     if (paused) {
@@ -686,7 +686,7 @@
   // ---------- Input ----------
   document.addEventListener("keydown", (e) => {
     if (e.ctrlKey || e.altKey || e.metaKey) return;
-    if (!GAME_KEYS.has(e.code)) return;
+    if (!GUS_KEYS.has(e.code)) return;
     if (/^(INPUT|TEXTAREA)$/.test(e.target.tagName)) return;
     ensureAudio();
     e.preventDefault();
@@ -697,7 +697,7 @@
 
     if (e.code === "KeyP") { togglePause(); return; }
     if (e.code === "Enter" || e.code === "Space") {
-      if (!state.running) startGame();
+      if (!state.running) startGus();
       else if (state.paused) setPaused(false);
       else launch();
     }
@@ -732,13 +732,13 @@
     ensureAudio();
     startBtn.blur();
     if (state.paused) setPaused(false);
-    else startGame();
+    else startGus();
   });
 
   pauseBtn.addEventListener("click", () => {
     pauseBtn.blur();
     if (state.running) togglePause();
-    else startGame();
+    else startGus();
   });
 
   // Auto-pause when the player switches away (also drops any held key).

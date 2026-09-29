@@ -22,7 +22,7 @@ window.Arcade.stats = (() => {
   }
 
   function isRun(r) {
-    return r && typeof r.game === "string" && Number.isFinite(r.score) && Number.isFinite(r.ts);
+    return r && typeof r.gus === "string" && Number.isFinite(r.score) && Number.isFinite(r.ts);
   }
 
   function save(runs) {
@@ -31,10 +31,10 @@ window.Arcade.stats = (() => {
   }
 
   /** Record one finished run. Extra fields (lines, level, durationMs) optional. */
-  function record(game, run) {
+  function record(gus, run) {
     const runs = load();
     runs.push({
-      game,
+      gus,
       ts: Date.now(),
       score: Number(run.score) || 0,
       lines: Number(run.lines) || 0,      // Tetris
@@ -46,11 +46,11 @@ window.Arcade.stats = (() => {
     return runs;
   }
 
-  const runsFor = (game) => load().filter(r => r.game === game);
+  const runsFor = (gus) => load().filter(r => r.gus === gus);
 
   /** Highest-scoring run for a title, or null if never played. */
-  function best(game) {
-    return runsFor(game).reduce((top, r) => (!top || r.score > top.score ? r : top), null);
+  function best(gus) {
+    return runsFor(gus).reduce((top, r) => (!top || r.score > top.score ? r : top), null);
   }
 
   /** The last N runs, newest first. A title repeats if it was played twice. */
@@ -67,7 +67,7 @@ window.Arcade.stats = (() => {
     const runs = load();
     return {
       score: runs.reduce((n, r) => n + r.score, 0),
-      games: runs.length,
+      gus: runs.length,
       lines: runs.reduce((n, r) => n + r.lines, 0),
       bestLevel: runs.reduce((n, r) => Math.max(n, r.level), 0),
       timeMs: runs.reduce((n, r) => n + r.durationMs, 0),

@@ -1,4 +1,4 @@
-/* Snake — game logic and rendering for the instrument-panel play screen (2a).
+/* Snake — Gus logic and rendering for the instrument-panel play screen (2a).
    Depends on catalog.js/stats.js for the local score history. */
 (() => {
   "use strict";
@@ -48,7 +48,7 @@
     ArrowLeft: "left", KeyA: "left",
     ArrowRight: "right", KeyD: "right",
   };
-  const GAME_KEYS = new Set([...Object.keys(KEY_DIRS), "KeyP", "Enter", "Space", "ShiftLeft", "ShiftRight"]);
+  const GUS_KEYS = new Set([...Object.keys(KEY_DIRS), "KeyP", "Enter", "Space", "ShiftLeft", "ShiftRight"]);
 
   // ---------- DOM ----------
   const byId = (id) => document.getElementById(id);
@@ -98,7 +98,7 @@
     snake: [], dir: DIRS.right, turnQueue: [], apple: null,
     score: 0, apples: 0, grow: 0, tier: 1, tickMs: BASE_TICK,
     mode: "classic", pendingMode: "classic",
-    sprinting: false, running: false, paused: false, gameOver: false,
+    sprinting: false, running: false, paused: false, gusOver: false,
     elapsedMs: 0, acc: 0, lastTime: 0, metaTimer: 0, rafId: 0,
     lastNearMiss: -Infinity, log: [],
   };
@@ -155,7 +155,7 @@
   function renderTopScores() {
     if (!stats) return;
     const runs = stats.all()
-      .filter(r => r.game === "snake")
+      .filter(r => r.gus === "snake")
       .sort((a, b) => b.score - a.score || b.ts - a.ts)
       .slice(0, 4);
 
@@ -200,7 +200,7 @@
         nx = (nx + COLS) % COLS;
         ny = (ny + ROWS) % ROWS;
       } else {
-        return endGame("wall");
+        return endGus("wall");
       }
     }
 
@@ -210,7 +210,7 @@
     // The tail cell frees up on this tick unless we are growing into it.
     const growing = eating || state.grow > 0;
     const body = growing ? state.snake : state.snake.slice(0, -1);
-    if (body.some(s => cellsEqual(s, next))) return endGame("tail");
+    if (body.some(s => cellsEqual(s, next))) return endGus("tail");
 
     state.snake.unshift(next);
     if (eating) {
@@ -366,8 +366,8 @@
   }
   const hideOverlay = () => overlay.classList.add("hidden");
 
-  // ---------- Game flow ----------
-  function startGame() {
+  // ---------- Gus flow ----------
+  function startGus() {
     cancelAnimationFrame(state.rafId);
     const midY = Math.floor(ROWS / 2);
     const snake = [];
@@ -380,7 +380,7 @@
       score: 0, apples: 0, grow: 0, tier: 1,
       mode: state.pendingMode,
       tickMs: BASE_TICK,
-      sprinting: false, running: true, paused: false, gameOver: false,
+      sprinting: false, running: true, paused: false, gusOver: false,
       elapsedMs: 0, acc: 0, lastTime: 0, metaTimer: 0,
       lastNearMiss: -Infinity, log: [],
     });
@@ -396,9 +396,9 @@
     state.rafId = requestAnimationFrame(loop);
   }
 
-  function endGame(cause) {
+  function endGus(cause) {
     state.running = false;
-    state.gameOver = true;
+    state.gusOver = true;
     state.paused = false;
     cancelAnimationFrame(state.rafId);
     sfx.over();
@@ -415,7 +415,7 @@
       renderTopScores();
     }
     showOverlay(
-      "Game over",
+      "Gus over",
       `${cause === "wall" ? "Into the wall" : "Into your own tail"} · ${num(state.score)} points · ${state.apples} apples`,
       "Play again"
     );
@@ -423,7 +423,7 @@
   }
 
   function setPaused(paused) {
-    if (!state.running || state.gameOver || state.paused === paused) return;
+    if (!state.running || state.gusOver || state.paused === paused) return;
     state.paused = paused;
     pauseBtn.textContent = paused ? "Resume" : "Pause";
     if (paused) {
@@ -482,7 +482,7 @@
   // ---------- Input ----------
   document.addEventListener("keydown", (e) => {
     if (e.ctrlKey || e.altKey || e.metaKey) return;
-    if (!GAME_KEYS.has(e.code)) return;
+    if (!GUS_KEYS.has(e.code)) return;
     if (/^(INPUT|TEXTAREA)$/.test(e.target.tagName)) return;
     ensureAudio();
     e.preventDefault();
@@ -495,7 +495,7 @@
     if (e.repeat && (e.code === "KeyP" || e.code === "Enter" || e.code === "Space")) return;
 
     if (e.code === "Enter" || e.code === "Space") {
-      if (!state.running) startGame();
+      if (!state.running) startGus();
       else togglePause();
       return;
     }
@@ -517,13 +517,13 @@
     ensureAudio();
     startBtn.blur();
     if (state.paused) setPaused(false);
-    else startGame();
+    else startGus();
   });
 
   pauseBtn.addEventListener("click", () => {
     pauseBtn.blur();
     if (state.running) togglePause();
-    else startGame();
+    else startGus();
   });
 
   // Auto-pause when the player switches away (also drops any held sprint).

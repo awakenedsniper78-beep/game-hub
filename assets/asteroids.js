@@ -1,4 +1,4 @@
-/* Asteroids — game logic and vector rendering for the instrument-panel play
+/* Asteroids — Gus logic and vector rendering for the instrument-panel play
    screen. Everything wraps at the edges, including the drawing, so a rock
    straddling a border is painted on both sides.
    Depends on catalog.js/stats.js for the local score history.               */
@@ -42,7 +42,7 @@
   const SHOT_C = "#e8ecff";
   const FLAME_C = "#ffd166";
 
-  const GAME_KEYS = new Set([
+  const GUS_KEYS = new Set([
     "ArrowLeft", "ArrowRight", "ArrowUp", "KeyA", "KeyD", "KeyW",
     "Space", "Enter", "KeyP", "ShiftLeft", "ShiftRight",
   ]);
@@ -105,7 +105,7 @@
     hyper: HYPER_CHARGES, hyperCool: 0,
     waveKills: 0, waveTotal: 0, nextLife: EXTRA_LIFE_EVERY,
     fireCool: 0, respawn: 0,
-    running: false, paused: false, gameOver: false,
+    running: false, paused: false, gusOver: false,
     elapsedMs: 0, lastTime: 0, metaTimer: 0, rafId: 0,
     log: [],
   };
@@ -161,7 +161,7 @@
   function renderTopScores() {
     if (!stats) return;
     const runs = stats.all()
-      .filter(r => r.game === "asteroids")
+      .filter(r => r.gus === "asteroids")
       .sort((a, b) => b.score - a.score || b.ts - a.ts)
       .slice(0, 4);
 
@@ -306,7 +306,7 @@
     state.thrusting = false;
     sfx.death();
 
-    if (state.lives <= 0) { log("SHIP LOST · NO SHIPS LEFT"); return endGame(); }
+    if (state.lives <= 0) { log("SHIP LOST · NO SHIPS LEFT"); return endGus(); }
     log(`SHIP LOST · ${state.lives} LEFT`);
     state.respawn = RESPAWN_DELAY;
   }
@@ -525,7 +525,7 @@
   }
 
   // ---------- Flow ----------
-  function startGame() {
+  function startGus() {
     cancelAnimationFrame(state.rafId);
     Object.assign(state, {
       rocks: [], bullets: [], bits: [],
@@ -534,7 +534,7 @@
       hyper: HYPER_CHARGES, hyperCool: 0,
       waveKills: 0, waveTotal: 0, nextLife: EXTRA_LIFE_EVERY,
       fireCool: 0, respawn: 0,
-      running: true, paused: false, gameOver: false,
+      running: true, paused: false, gusOver: false,
       elapsedMs: 0, lastTime: 0, metaTimer: 0,
       log: [],
     });
@@ -549,9 +549,9 @@
     state.rafId = requestAnimationFrame(loop);
   }
 
-  function endGame() {
+  function endGus() {
     state.running = false;
-    state.gameOver = true;
+    state.gusOver = true;
     state.paused = false;
     cancelAnimationFrame(state.rafId);
     sfx.over();
@@ -565,11 +565,11 @@
       });
       renderTopScores();
     }
-    showOverlay("Game over", `Wave ${pad2(state.wave)} · ${num(state.score)} points`, "Play again");
+    showOverlay("Gus over", `Wave ${pad2(state.wave)} · ${num(state.score)} points`, "Play again");
   }
 
   function setPaused(paused) {
-    if (!state.running || state.gameOver || state.paused === paused) return;
+    if (!state.running || state.gusOver || state.paused === paused) return;
     state.paused = paused;
     pauseBtn.textContent = paused ? "Resume" : "Pause";
     if (paused) {
@@ -612,7 +612,7 @@
   // ---------- Input ----------
   document.addEventListener("keydown", (e) => {
     if (e.ctrlKey || e.altKey || e.metaKey) return;
-    if (!GAME_KEYS.has(e.code)) return;
+    if (!GUS_KEYS.has(e.code)) return;
     if (/^(INPUT|TEXTAREA)$/.test(e.target.tagName)) return;
     ensureAudio();
     e.preventDefault();
@@ -622,13 +622,13 @@
     if (e.code === "ArrowUp" || e.code === "KeyW") { state.thrusting = true; return; }
 
     if (e.code === "Space") {
-      if (!state.running) { if (!e.repeat) startGame(); return; }
+      if (!state.running) { if (!e.repeat) startGus(); return; }
       if (state.paused) return;
       fire();
       return;
     }
     if (e.repeat) return;
-    if (e.code === "Enter") { if (!state.running) startGame(); else togglePause(); return; }
+    if (e.code === "Enter") { if (!state.running) startGus(); else togglePause(); return; }
     if (e.code === "KeyP") { togglePause(); return; }
     if (e.code === "ShiftLeft" || e.code === "ShiftRight") {
       if (state.running && !state.paused) hyperspace();
@@ -645,13 +645,13 @@
     ensureAudio();
     startBtn.blur();
     if (state.paused) setPaused(false);
-    else startGame();
+    else startGus();
   });
 
   pauseBtn.addEventListener("click", () => {
     pauseBtn.blur();
     if (state.running) togglePause();
-    else startGame();
+    else startGus();
   });
 
   // Auto-pause when the player switches away (also drops any held key).

@@ -6,9 +6,9 @@
   const pad2 = (n) => String(n).padStart(2, "0");
   const esc = (s) => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 
-  const statusNote = (game) => {
-    if (game.status === "playable") return "PLAYABLE";
-    if (game.status === "wip") return `BUILD ${game.build || "—"}`;
+  const statusNote = (gus) => {
+    if (gus.status === "playable") return "PLAYABLE";
+    if (gus.status === "wip") return `BUILD ${gus.build || "—"}`;
     return "QUEUED";
   };
 
@@ -17,13 +17,13 @@
   document.getElementById("specPlayable").textContent = `${pad2(playable)} / ${pad2(catalog.length)}`;
 
   // Title strip — playable entries link, the rest are dimmed placeholders
-  document.getElementById("titleStrip").innerHTML = catalog.map((game, i) => {
+  document.getElementById("titleStrip").innerHTML = catalog.map((gus, i) => {
     const body = `
       <span class="idx">${pad2(i + 1)}</span>
-      <span class="nm">${esc(game.name)}</span>
-      <span class="micro sm">${statusNote(game)}</span>`;
-    return game.href
-      ? `<a href="${game.href}">${body}</a>`
+      <span class="nm">${esc(gus.name)}</span>
+      <span class="micro sm">${statusNote(gus)}</span>`;
+    return gus.href
+      ? `<a href="${gus.href}">${body}</a>`
       : `<div class="off">${body}</div>`;
   }).join("");
 
@@ -32,10 +32,10 @@
   const list = document.getElementById("topRuns");
   list.innerHTML = runs.length
     ? runs.map((run, i) => {
-        const game = window.Arcade.byId(run.game);
+        const gus = window.Arcade.byId(run.gus);
         // Only the personal best is called out in accent; the rest stay quiet.
         return `<div class="row${i === 0 ? " you" : ""}">
-            <span>${esc((game ? game.name : run.game).toUpperCase())} · ${stats.ago(run.ts)}</span>
+            <span>${esc((gus ? gus.name : run.gus).toUpperCase())} · ${stats.ago(run.ts)}</span>
             <b>${stats.num(run.score)}</b>
           </div>`;
       }).join("")

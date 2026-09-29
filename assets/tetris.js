@@ -1,4 +1,4 @@
-/* Tetris — game logic and rendering for the instrument-panel play screen.
+/* Tetris — Gus logic and rendering for the instrument-panel play screen.
    Depends on catalog.js/stats.js for the local score history. */
 (() => {
   "use strict";
@@ -31,7 +31,7 @@
     S: "#66e0a3", Z: "#ff6b9d", J: "#5ad1e6", L: "#ff9f57",
   };
   const LINE_SCORES = [0, 100, 300, 500, 800];
-  const GAME_KEYS = new Set([
+  const GUS_KEYS = new Set([
     "ArrowLeft", "ArrowRight", "ArrowDown", "ArrowUp",
     "KeyX", "KeyZ", "Space", "KeyC", "KeyP", "Enter",
   ]);
@@ -86,7 +86,7 @@
   const state = {
     grid: [], piece: null, bag: [], holdType: null,
     score: 0, lines: 0, level: 1,
-    canHold: true, paused: false, gameOver: false, running: false,
+    canHold: true, paused: false, gusOver: false, running: false,
     dropInterval: BASE_DROP_MS, dropTimer: 0, lastTime: 0, rafId: 0,
     elapsedMs: 0, metaTimer: 0,
   };
@@ -170,10 +170,10 @@
   function lockPiece() {
     const piece = state.piece;
 
-    // Top-out check first, so the grid is never left half-written on game over.
+    // Top-out check first, so the grid is never left half-written on Gus over.
     let toppedOut = false;
     forEachPieceCell(piece, (gx, gy) => { if (gy < 0) toppedOut = true; });
-    if (toppedOut) { endGame(); return; }
+    if (toppedOut) { endGus(); return; }
 
     forEachPieceCell(piece, (gx, gy) => { state.grid[gy][gx] = piece.type; });
 
@@ -181,7 +181,7 @@
     state.canHold = true;
     state.dropTimer = 0;
     state.piece = spawnPiece(takeNext());
-    if (collides(state.piece)) { endGame(); return; }
+    if (collides(state.piece)) { endGus(); return; }
     updateStats();
     drawQueue();
     draw();
@@ -237,7 +237,7 @@
     if (!state.canHold || !state.piece) return;
     const current = state.piece.type;
     const swapped = state.holdType ? spawnPiece(state.holdType) : spawnPiece(takeNext());
-    if (collides(swapped)) { endGame(); return; }
+    if (collides(swapped)) { endGus(); return; }
 
     state.piece = swapped;
     state.holdType = current;
@@ -275,7 +275,7 @@
   function renderTopScores() {
     if (!stats) return;
     const runs = stats.all()
-      .filter(r => r.game === "tetris")
+      .filter(r => r.gus === "tetris")
       .sort((a, b) => b.score - a.score || b.ts - a.ts)
       .slice(0, 4);
 
@@ -359,13 +359,13 @@
   }
   const hideOverlay = () => overlay.classList.add("hidden");
 
-  // ---------- Game flow ----------
-  function startGame() {
+  // ---------- Gus flow ----------
+  function startGus() {
     cancelAnimationFrame(state.rafId);   // never leave a second loop running
     Object.assign(state, {
       grid: emptyGrid(), bag: [], holdType: null, piece: null,
       score: 0, lines: 0, level: 1,
-      canHold: true, paused: false, gameOver: false, running: true,
+      canHold: true, paused: false, gusOver: false, running: true,
       dropInterval: BASE_DROP_MS, dropTimer: 0, lastTime: 0,
       elapsedMs: 0, metaTimer: 0,
     });
@@ -380,8 +380,8 @@
     state.rafId = requestAnimationFrame(loop);
   }
 
-  function endGame() {
-    state.gameOver = true;
+  function endGus() {
+    state.gusOver = true;
     state.running = false;
     state.paused = false;
     cancelAnimationFrame(state.rafId);
@@ -399,11 +399,11 @@
       renderTopScores();
     }
     const num = stats ? stats.num : String;
-    showOverlay("Game over", `Score ${num(state.score)} · ${state.lines} lines · level ${state.level}`, "Play again");
+    showOverlay("Gus over", `Score ${num(state.score)} · ${state.lines} lines · level ${state.level}`, "Play again");
   }
 
   function setPaused(paused) {
-    if (!state.running || state.gameOver || state.paused === paused) return;
+    if (!state.running || state.gusOver || state.paused === paused) return;
     state.paused = paused;
     pauseBtn.textContent = paused ? "Resume" : "Pause";
     if (paused) {
@@ -433,7 +433,7 @@
     while (state.running && state.dropTimer >= state.dropInterval) {
       state.dropTimer -= state.dropInterval;
       if (collides(state.piece, 0, 1)) {
-        lockPiece();   // re-draws, and may end the game
+        lockPiece();   // re-draws, and may end the Gus
         break;
       }
       state.piece.y++;
@@ -444,7 +444,7 @@
   // ---------- Input ----------
   document.addEventListener("keydown", (e) => {
     if (e.ctrlKey || e.altKey || e.metaKey) return;
-    if (!GAME_KEYS.has(e.code)) return;
+    if (!GUS_KEYS.has(e.code)) return;
     if (/^(INPUT|TEXTAREA)$/.test(e.target.tagName)) return;
     ensureAudio();
     e.preventDefault();          // stop arrows/space from scrolling the page
@@ -452,11 +452,11 @@
     if (e.repeat && (e.code === "Space" || e.code === "KeyC" || e.code === "KeyP" || e.code === "Enter")) return;
 
     if (e.code === "Enter") {
-      if (!state.running) startGame();
+      if (!state.running) startGus();
       else togglePause();
       return;
     }
-    if (!state.running || state.paused || state.gameOver) return;
+    if (!state.running || state.paused || state.gusOver) return;
 
     const p = state.piece;
     switch (e.code) {
@@ -487,15 +487,15 @@
 
   startBtn.addEventListener("click", () => {
     ensureAudio();
-    startBtn.blur();             // otherwise Space/Enter would re-trigger the button mid-game
+    startBtn.blur();             // otherwise Space/Enter would re-trigger the button mid-Gus
     if (state.paused) setPaused(false);
-    else startGame();
+    else startGus();
   });
 
   pauseBtn.addEventListener("click", () => {
     pauseBtn.blur();
     if (state.running) togglePause();
-    else startGame();
+    else startGus();
   });
 
   // Auto-pause when the player switches away.
