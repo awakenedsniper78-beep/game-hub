@@ -1,5 +1,5 @@
 /* Shared play-screen chassis — the three-column instrument panel used by
-   every Gus (Tetris 1b, Snake 2a, Breakout 3a, 2048 3b).
+   every Gus (Stack 1b, Trail 2a, Bounce 3a, Tiles 3b).
    Per-Gus panels live in <gus>.css.
 
    Play screens get a wider shell than the content pages: the rails stay at
@@ -109,7 +109,7 @@ body.is-play main.shell { max-width: var(--shell-wide); }
 .scores .line b { font-variant-numeric: tabular-nums; font-weight: 600; color: var(--text); }
 .scores .line.top span, .scores .line.top b { color: var(--accent); }
 
-/* Mode picker — shared by Snake and Minesweeper. */
+/* Mode picker — shared by Trail and Cells. */
 .modes { display: flex; flex-direction: column; gap: 2px; }
 .modes button {
   padding: 8px 11px;

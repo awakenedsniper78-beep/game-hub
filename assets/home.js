@@ -2,7 +2,7 @@
 (() => {
   "use strict";
 
-  const { catalog, stats } = window.Arcade;
+  const { catalog, stats } = window.Gus;
   const pad2 = (n) => String(n).padStart(2, "0");
   const esc = (s) => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 
@@ -32,7 +32,7 @@
   const list = document.getElementById("topRuns");
   list.innerHTML = runs.length
     ? runs.map((run, i) => {
-        const gus = window.Arcade.byId(run.gus);
+        const gus = window.Gus.byId(run.gus);
         // Only the personal best is called out in accent; the rest stay quiet.
         return `<div class="row${i === 0 ? " you" : ""}">
             <span>${esc((gus ? gus.name : run.gus).toUpperCase())} · ${stats.ago(run.ts)}</span>
@@ -40,5 +40,5 @@
           </div>`;
       }).join("")
     : `<p class="empty">No runs recorded yet. Scores you set are saved in this browser and show up here —
-       <a href="tetris.html">start with Tetris</a>.</p>`;
+       <a href="stack.html">start with Stack</a>.</p>`;
 })();

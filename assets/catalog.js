@@ -1,80 +1,80 @@
-/* The arcade catalogue — single source of truth for every title listing.
+/* The Gus catalogue — single source of truth for every title listing.
    Home, Library and Profile all render from this array.
    `status` drives the badge and whether the card is a link:
      playable — shipped, `href` set
      wip      — being built, `href` null
      planned  — reserved slot, `href` null                                   */
 
-window.Arcade = window.Arcade || {};
+window.Gus = window.Gus || {};
 
-window.Arcade.catalog = [
+window.Gus.catalog = [
   {
-    id: "tetris",
-    name: "Tetris",
+    id: "stack",
+    name: "Stack",
     icon: "🟦",
-    href: "tetris.html",
+    href: "stack.html",
     status: "playable",
     genre: "Puzzle",
     build: "1.2",
     blurb: "Stack the falling pieces and clear full rows or columns.",
   },
   {
-    id: "snake",
-    name: "Snake",
-    icon: "🐍",
-    href: "snake.html",
+    id: "trail",
+    name: "Trail",
+    icon: "🟩",
+    href: "trail.html",
     status: "playable",
-    genre: "Arcade",
+    genre: "Motion",
     build: "1.0",
     blurb: "Eat, grow, and never meet your own tail.",
   },
   {
-    id: "breakout",
-    name: "Breakout",
-    icon: "🧱",
-    href: "breakout.html",
+    id: "bounce",
+    name: "Bounce",
+    icon: "🟨",
+    href: "bounce.html",
     status: "playable",
-    genre: "Arcade",
+    genre: "Motion",
     build: "1.0",
     blurb: "One paddle, one ball, forty-eight bricks.",
   },
   {
-    id: "2048",
-    name: "2048",
-    icon: "🔢",
-    href: "2048.html",
+    id: "tiles",
+    name: "Tiles",
+    icon: "🟧",
+    href: "tiles.html",
     status: "playable",
     genre: "Puzzle",
     build: "1.0",
     blurb: "Slide tiles, double them, run out of room.",
   },
   {
-    id: "minesweeper",
-    name: "Minesweeper",
-    icon: "💣",
-    href: "minesweeper.html",
+    id: "cells",
+    name: "Cells",
+    icon: "🟥",
+    href: "cells.html",
     status: "playable",
     genre: "Puzzle",
     build: "1.0",
     blurb: "Read the numbers, flag the rest, hold your breath.",
   },
   {
-    id: "asteroids",
-    name: "Asteroids",
-    icon: "🚀",
-    href: "asteroids.html",
+    id: "orbit",
+    name: "Orbit",
+    icon: "🟪",
+    href: "orbit.html",
     status: "playable",
-    genre: "Arcade",
+    genre: "Motion",
     build: "1.0",
     blurb: "Vector rocks, vector ship, vector regret.",
   },
 ];
 
-window.Arcade.statusLabel = {
+window.Gus.statusLabel = {
   playable: "Playable",
   wip: "In progress",
   planned: "Planned",
 };
 
-window.Arcade.byId = (id) => window.Arcade.catalog.find(g => g.id === id) || null;
-window.Arcade.playable = () => window.Arcade.catalog.filter(g => g.status === "playable");
+window.Gus.byId = (id) => window.Gus.catalog.find(g => g.id === id) || null;
+window.Gus.playable = () => window.Gus.catalog.filter(g => g.status === "playable");

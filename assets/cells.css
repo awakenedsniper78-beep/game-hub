@@ -1,4 +1,4 @@
-/* Minesweeper-only panels: the cell grid and the number key.
+/* Cells-only panels: the cell grid and the number key.
    The mode picker and log panel are shared, in play.css. */
 
 /* Field scaling — the grid is square whatever the difficulty. */

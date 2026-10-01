@@ -1,4 +1,4 @@
-/* Snake — Gus logic and rendering for the instrument-panel play screen (2a).
+/* Trail — Gus logic and rendering for the instrument-panel play screen (2a).
    Depends on catalog.js/stats.js for the local score history. */
 (() => {
   "use strict";
@@ -61,7 +61,7 @@
   const overlay = byId("overlay"), ovTitle = byId("ovTitle"), ovMsg = byId("ovMsg");
   const startBtn = byId("startBtn"), pauseBtn = byId("pauseBtn"), modesEl = byId("modes");
 
-  const stats = window.Arcade && window.Arcade.stats;
+  const stats = window.Gus && window.Gus.stats;
   const num = stats ? stats.num : String;
 
   // ---------- Audio (Web Audio API, no files) ----------
@@ -95,7 +95,7 @@
 
   // ---------- State ----------
   const state = {
-    snake: [], dir: DIRS.right, turnQueue: [], apple: null,
+    trail: [], dir: DIRS.right, turnQueue: [], apple: null,
     score: 0, apples: 0, grow: 0, tier: 1, tickMs: BASE_TICK,
     mode: "classic", pendingMode: "classic",
     sprinting: false, running: false, paused: false, gusOver: false,
@@ -104,7 +104,7 @@
   };
 
   const cellsEqual = (a, b) => a.x === b.x && a.y === b.y;
-  const inBody = (cell, from = 0) => state.snake.slice(from).some(s => cellsEqual(s, cell));
+  const inBody = (cell, from = 0) => state.trail.slice(from).some(s => cellsEqual(s, cell));
 
   // ---------- Speed tiers ----------
   function tickForApples(apples) {
@@ -135,7 +135,7 @@
   // ---------- Readouts ----------
   function updateStats() {
     scoreEl.textContent = num(state.score);
-    lengthEl.textContent = state.snake.length;
+    lengthEl.textContent = state.trail.length;
     applesEl.textContent = state.apples;
 
     const tier = state.tier;
@@ -149,13 +149,13 @@
   }
 
   function updateMeta() {
-    sessionMeta.textContent = `SNAKE / BUILD 1.0 / SESSION ${clock(state.elapsedMs)}`;
+    sessionMeta.textContent = `TRAIL / BUILD 1.0 / SESSION ${clock(state.elapsedMs)}`;
   }
 
   function renderTopScores() {
     if (!stats) return;
     const runs = stats.all()
-      .filter(r => r.gus === "snake")
+      .filter(r => r.gus === "trail")
       .sort((a, b) => b.score - a.score || b.ts - a.ts)
       .slice(0, 4);
 
@@ -179,7 +179,7 @@
 
   // ---------- Stepping ----------
   function step() {
-    // One queued turn per tick, so a fast double-tap cannot fold the snake back
+    // One queued turn per tick, so a fast double-tap cannot fold the trail back
     // into its own neck.
     while (state.turnQueue.length) {
       const next = DIRS[state.turnQueue.shift()];
@@ -190,7 +190,7 @@
       break;
     }
 
-    const head = state.snake[0];
+    const head = state.trail[0];
     let nx = head.x + state.dir.x;
     let ny = head.y + state.dir.y;
 
@@ -209,10 +209,10 @@
 
     // The tail cell frees up on this tick unless we are growing into it.
     const growing = eating || state.grow > 0;
-    const body = growing ? state.snake : state.snake.slice(0, -1);
+    const body = growing ? state.trail : state.trail.slice(0, -1);
     if (body.some(s => cellsEqual(s, next))) return endGus("tail");
 
-    state.snake.unshift(next);
+    state.trail.unshift(next);
     if (eating) {
       state.apples++;
       state.grow += GROWTH_PER_APPLE;
@@ -236,7 +236,7 @@
     }
 
     if (state.grow > 0) state.grow--;
-    else state.snake.pop();
+    else state.trail.pop();
 
     checkNearMiss();
     updateStats();
@@ -245,12 +245,12 @@
   /** Log a near miss when the head squeezes past its own body or a wall. */
   function checkNearMiss() {
     if (state.elapsedMs - state.lastNearMiss < NEAR_MISS_COOLDOWN) return;
-    const head = state.snake[0];
+    const head = state.trail[0];
     const ahead = { x: head.x + state.dir.x, y: head.y + state.dir.y };
 
     // Ignore the neck and the two segments behind it — those are always adjacent.
     const tailBrush = inBody(ahead, 3) ||
-      state.snake.slice(3).some(s => Math.abs(s.x - head.x) + Math.abs(s.y - head.y) === 1);
+      state.trail.slice(3).some(s => Math.abs(s.x - head.x) + Math.abs(s.y - head.y) === 1);
     const wallBrush = state.mode !== "wrap" &&
       (head.x === 0 || head.y === 0 || head.x === COLS - 1 || head.y === ROWS - 1);
 
@@ -280,7 +280,7 @@
 
   /** Bar joining two neighbouring cell centres — the ribbon body. */
   function drawLink(a, b, width, color) {
-    // Skip the join when a wrap teleports the snake across the field.
+    // Skip the join when a wrap teleports the trail across the field.
     if (Math.abs(a.x - b.x) > 1 || Math.abs(a.y - b.y) > 1) return;
     const x1 = center(a.x), y1 = center(a.y), x2 = center(b.x), y2 = center(b.y);
     const left = Math.min(x1, x2) - width / 2;
@@ -291,19 +291,19 @@
     ctx.fillRect(Math.round(left), Math.round(top), Math.round(w), Math.round(h));
   }
 
-  function drawSnake() {
-    const n = state.snake.length;
+  function drawTrail() {
+    const n = state.trail.length;
     for (let i = n - 1; i >= 0; i--) {
-      const seg = state.snake[i];
+      const seg = state.trail[i];
       const t = n === 1 ? 1 : 1 - i / (n - 1);          // 0 at the tail, 1 at the head
       const color = lerpColor(TAIL_C, BODY_C, Math.min(1, t * 1.15));
       const width = i === n - 1 ? TAIL_W : BODY_W;
       drawLink(seg, seg, width, color);
-      if (i < n - 1) drawLink(seg, state.snake[i + 1], Math.min(width, BODY_W), color);
+      if (i < n - 1) drawLink(seg, state.trail[i + 1], Math.min(width, BODY_W), color);
     }
 
     // Head: glowing block, eyes turned the way it is travelling, sight line ahead.
-    const head = state.snake[0];
+    const head = state.trail[0];
     const hx = center(head.x), hy = center(head.y);
     ctx.save();
     ctx.shadowColor = "rgba(102,224,163,.45)";
@@ -354,7 +354,7 @@
   function draw() {
     drawGrid();
     drawApple();
-    if (state.snake.length) drawSnake();
+    if (state.trail.length) drawTrail();
   }
 
   // ---------- Overlay ----------
@@ -370,11 +370,11 @@
   function startGus() {
     cancelAnimationFrame(state.rafId);
     const midY = Math.floor(ROWS / 2);
-    const snake = [];
-    for (let i = 0; i < START_LENGTH; i++) snake.push({ x: Math.floor(COLS / 3) - i, y: midY });
+    const trail = [];
+    for (let i = 0; i < START_LENGTH; i++) trail.push({ x: Math.floor(COLS / 3) - i, y: midY });
 
     Object.assign(state, {
-      snake,
+      trail,
       dir: DIRS.right,
       turnQueue: [],
       score: 0, apples: 0, grow: 0, tier: 1,
@@ -406,7 +406,7 @@
     log(`RUN ENDED · ${cause === "wall" ? "WALL" : "TAIL"}`);
 
     if (stats) {
-      stats.record("snake", {
+      stats.record("trail", {
         score: state.score,
         apples: state.apples,
         level: state.tier,
@@ -534,13 +534,13 @@
 
   // ---------- Initial idle render ----------
   const midY = Math.floor(ROWS / 2);
-  state.snake = Array.from({ length: START_LENGTH }, (_, i) => ({ x: Math.floor(COLS / 3) - i, y: midY }));
+  state.trail = Array.from({ length: START_LENGTH }, (_, i) => ({ x: Math.floor(COLS / 3) - i, y: midY }));
   state.apple = { x: Math.floor(COLS * 0.7), y: midY };
   syncModeUI();
   updateStats();
   updateMeta();
   renderLog();
   renderTopScores();
-  if (window.Arcade && window.Arcade.fitCanvas) window.Arcade.fitCanvas(boardCv, FIELD_W, FIELD_H, draw);
+  if (window.Gus && window.Gus.fitCanvas) window.Gus.fitCanvas(boardCv, FIELD_W, FIELD_H, draw);
   else draw();
 })();

@@ -2,7 +2,7 @@
 (() => {
   "use strict";
 
-  const { catalog, stats } = window.Arcade;
+  const { catalog, stats } = window.Gus;
   const byId = (id) => document.getElementById(id);
   const esc = (s) => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 
@@ -60,7 +60,7 @@
     spark.style.display = "none";
     byId("sparkFrom").textContent = "";
     byId("sparkTo").textContent = "";
-    byId("trend").innerHTML = 'Nothing recorded yet — <a href="tetris.html">play a round of Tetris</a> ' +
+    byId("trend").innerHTML = 'Nothing recorded yet — <a href="stack.html">play a round of Stack</a> ' +
       "and this profile fills in.";
   }
 })();

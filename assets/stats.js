@@ -3,12 +3,12 @@
    browser only. No accounts, no network, matching the design's
    "Saved in this browser" line.                                             */
 
-window.Arcade = window.Arcade || {};
+window.Gus = window.Gus || {};
 
-window.Arcade.stats = (() => {
+window.Gus.stats = (() => {
   "use strict";
 
-  const KEY = "arcade.history.v1";
+  const KEY = "gus.history.v1";
   const DAY = 86400000;
 
   function load() {
@@ -37,8 +37,8 @@ window.Arcade.stats = (() => {
       gus,
       ts: Date.now(),
       score: Number(run.score) || 0,
-      lines: Number(run.lines) || 0,      // Tetris
-      apples: Number(run.apples) || 0,    // Snake
+      lines: Number(run.lines) || 0,      // Stack
+      apples: Number(run.apples) || 0,    // Trail
       level: Number(run.level) || 1,
       durationMs: Number(run.durationMs) || 0,
     });

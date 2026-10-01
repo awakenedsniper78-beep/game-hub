@@ -3,7 +3,7 @@
 (() => {
   "use strict";
 
-  const { catalog, statusLabel, stats } = window.Arcade;
+  const { catalog, statusLabel, stats } = window.Gus;
   const byId = (id) => document.getElementById(id);
 
   const grid = byId("titleGrid");
@@ -45,7 +45,7 @@
   function renderRecent() {
     const cells = [];
     for (const run of stats.recentRuns(SLOTS)) {
-      const gus = window.Arcade.byId(run.gus);
+      const gus = window.Gus.byId(run.gus);
       if (gus) cells.push(recentCell(gus, `${stats.ago(run.ts)} · ${stats.num(run.score)}`));
     }
 
@@ -66,7 +66,7 @@
   function matches(gus, query) {
     if (filter === "playable" && gus.status !== "playable") return false;
     if (filter === "wip" && gus.status === "playable") return false;
-    if ((filter === "puzzle" || filter === "arcade") && gus.genre.toLowerCase() !== filter) return false;
+    if ((filter === "puzzle" || filter === "motion") && gus.genre.toLowerCase() !== filter) return false;
     if (!query) return true;
     const best = stats.best(gus.id);
     const haystack = [gus.name, gus.genre, gus.blurb, statusLabel[gus.status], best ? best.score : ""]

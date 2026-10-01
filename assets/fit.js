@@ -1,10 +1,10 @@
 /* Canvas fields are sized by CSS so they can fill a large screen, but every
-   Gus draws in its own fixed logical units (Tetris 240x480, Snake 440x440,
-   Breakout 560x420). This matches the backing store to the rendered size —
+   Gus draws in its own fixed logical units (Stack 240x480, Trail 440x440,
+   Bounce 560x420). This matches the backing store to the rendered size —
    times the device pixel ratio — and scales the context to suit, so the field
    stays crisp at any size and the Gus code never has to know about it.      */
 
-window.Arcade = window.Arcade || {};
+window.Gus = window.Gus || {};
 
 /**
  * @param {HTMLCanvasElement} canvas
@@ -13,7 +13,7 @@ window.Arcade = window.Arcade || {};
  * @param {function} redraw  called after every resize
  * @returns {function} the same fit routine, to call by hand if needed
  */
-window.Arcade.fitCanvas = function (canvas, logicalW, logicalH, redraw) {
+window.Gus.fitCanvas = function (canvas, logicalW, logicalH, redraw) {
   const ctx = canvas.getContext("2d");
 
   function fit() {

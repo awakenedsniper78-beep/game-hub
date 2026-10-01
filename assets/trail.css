@@ -1,4 +1,4 @@
-/* Snake-only panels: legend and the run log. The mode picker is shared, in play.css. */
+/* Trail-only panels: legend and the run log. The mode picker is shared, in play.css. */
 
 /* Field scaling — the 20 x 20 field is square. */
 body.is-play { --field-min: 458px; }   /* 440 canvas + 18 frame */

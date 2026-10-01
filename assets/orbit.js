@@ -1,4 +1,4 @@
-/* Asteroids — Gus logic and vector rendering for the instrument-panel play
+/* Orbit — Gus logic and vector rendering for the instrument-panel play
    screen. Everything wraps at the edges, including the drawing, so a rock
    straddling a border is painted on both sides.
    Depends on catalog.js/stats.js for the local score history.               */
@@ -58,7 +58,7 @@
   const overlay = byId("overlay"), ovTitle = byId("ovTitle"), ovMsg = byId("ovMsg");
   const startBtn = byId("startBtn"), pauseBtn = byId("pauseBtn");
 
-  const stats = window.Arcade && window.Arcade.stats;
+  const stats = window.Gus && window.Gus.stats;
   const num = stats ? stats.num : String;
   const pad2 = (n) => String(n).padStart(2, "0");
   const rand = (lo, hi) => lo + Math.random() * (hi - lo);
@@ -155,13 +155,13 @@
   }
 
   function updateMeta() {
-    sessionMeta.textContent = `ASTEROIDS / BUILD 1.0 / SESSION ${clock(state.elapsedMs)}`;
+    sessionMeta.textContent = `ORBIT / BUILD 1.0 / SESSION ${clock(state.elapsedMs)}`;
   }
 
   function renderTopScores() {
     if (!stats) return;
     const runs = stats.all()
-      .filter(r => r.gus === "asteroids")
+      .filter(r => r.gus === "orbit")
       .sort((a, b) => b.score - a.score || b.ts - a.ts)
       .slice(0, 4);
 
@@ -558,7 +558,7 @@
     draw();
 
     if (stats) {
-      stats.record("asteroids", {
+      stats.record("orbit", {
         score: state.score,
         level: state.wave,
         durationMs: state.elapsedMs,
@@ -674,6 +674,6 @@
   updateMeta();
   renderLog();
   renderTopScores();
-  if (window.Arcade && window.Arcade.fitCanvas) window.Arcade.fitCanvas(boardCv, W, H, draw);
+  if (window.Gus && window.Gus.fitCanvas) window.Gus.fitCanvas(boardCv, W, H, draw);
   else draw();
 })();

@@ -1,4 +1,4 @@
-/* Minesweeper — Gus logic for the instrument-panel play screen.
+/* Cells — Gus logic for the instrument-panel play screen.
    The board is DOM rather than canvas: every cell is a real button, so focus,
    keyboard play and screen readers all work without extra machinery.
    Depends on catalog.js/stats.js for the local score history.               */
@@ -30,7 +30,7 @@
   const overlay = byId("overlay"), ovTitle = byId("ovTitle"), ovMsg = byId("ovMsg");
   const startBtn = byId("startBtn"), newGusBtn = byId("newGusBtn");
 
-  const stats = window.Arcade && window.Arcade.stats;
+  const stats = window.Gus && window.Gus.stats;
   const num = stats ? stats.num : String;
   const pad2 = (n) => String(n).padStart(2, "0");
 
@@ -131,13 +131,13 @@
   }
 
   function updateMeta() {
-    sessionMeta.textContent = `MINESWEEPER / BUILD 1.0 / SESSION ${clock(state.elapsedMs)}`;
+    sessionMeta.textContent = `CELLS / BUILD 1.0 / SESSION ${clock(state.elapsedMs)}`;
   }
 
   function renderTopScores() {
     if (!stats) return;
     const runs = stats.all()
-      .filter(r => r.gus === "minesweeper")
+      .filter(r => r.gus === "cells")
       .sort((a, b) => b.score - a.score || b.ts - a.ts)
       .slice(0, 4);
 
@@ -365,7 +365,7 @@
 
     updateStats();
     if (stats) {
-      stats.record("minesweeper", {
+      stats.record("cells", {
         score: state.score,
         level: spec().level,
         durationMs: state.elapsedMs,
@@ -393,7 +393,7 @@
     updateStats();
     updateMeta();
     renderLog();
-    showOverlay("Minesweeper", "Click any cell to open the board", "Start");
+    showOverlay("Cells", "Click any cell to open the board", "Start");
   }
 
   // ---------- Overlay ----------

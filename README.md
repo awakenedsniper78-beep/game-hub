@@ -1,6 +1,6 @@
 [![Gus Hub](https://github.com/awakenedsniper78-beep/game-hub/blob/main/Screenshot%202026-08-22%20123131.png?raw=true)](https://awakenedsniper78-beep.github.io/game-hub/)
 
-# Arcade
+# Gus
 
 Browser Gus. No build step, no dependencies, no accounts.
 Open `index.html` and play — scores stay in your browser via `localStorage`.
@@ -11,12 +11,12 @@ Open `index.html` and play — scores stay in your browser via `localStorage`.
 
 | # | Title | Status |
 |---|-------|--------|
-| 01 | Tetris | ✅ Playable |
-| 02 | Snake | ✅ Playable |
-| 03 | Breakout | ✅ Playable |
-| 04 | 2048 | ✅ Playable |
-| 05 | Minesweeper | ✅ Playable |
-| 06 | Asteroids | ✅ Playable |
+| 01 | Stack | ✅ Playable |
+| 02 | Trail | ✅ Playable |
+| 03 | Bounce | ✅ Playable |
+| 04 | Tiles | ✅ Playable |
+| 05 | Cells | ✅ Playable |
+| 06 | Orbit | ✅ Playable |
 
 ## Run locally
 

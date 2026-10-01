@@ -1,4 +1,4 @@
-/* Breakout — Gus logic and rendering for the instrument-panel play screen (3a).
+/* Bounce — Gus logic and rendering for the instrument-panel play screen (3a).
    Depends on catalog.js/stats.js for the local score history. */
 (() => {
   "use strict";
@@ -69,7 +69,7 @@
   const overlay = byId("overlay"), ovTitle = byId("ovTitle"), ovMsg = byId("ovMsg");
   const startBtn = byId("startBtn"), pauseBtn = byId("pauseBtn");
 
-  const stats = window.Arcade && window.Arcade.stats;
+  const stats = window.Gus && window.Gus.stats;
   const num = stats ? stats.num : String;
 
   const clamp = (n, lo, hi) => Math.max(lo, Math.min(hi, n));
@@ -187,13 +187,13 @@
   }
 
   function updateMeta() {
-    sessionMeta.textContent = `BREAKOUT / BUILD 1.0 / SESSION ${clock(state.elapsedMs)}`;
+    sessionMeta.textContent = `BOUNCE / BUILD 1.0 / SESSION ${clock(state.elapsedMs)}`;
   }
 
   function renderTopScores() {
     if (!stats) return;
     const runs = stats.all()
-      .filter(r => r.gus === "breakout")
+      .filter(r => r.gus === "bounce")
       .sort((a, b) => b.score - a.score || b.ts - a.ts)
       .slice(0, 4);
 
@@ -480,7 +480,7 @@
     draw();
 
     if (stats) {
-      stats.record("breakout", {
+      stats.record("bounce", {
         score: state.score,
         level: state.stage,
         durationMs: state.elapsedMs,
@@ -755,6 +755,6 @@
   updateMeta();
   renderLog();
   renderTopScores();
-  if (window.Arcade && window.Arcade.fitCanvas) window.Arcade.fitCanvas(boardCv, W, H, draw);
+  if (window.Gus && window.Gus.fitCanvas) window.Gus.fitCanvas(boardCv, W, H, draw);
   else draw();
 })();

@@ -1,4 +1,4 @@
-/* 2048 — Gus logic and rendering for the instrument-panel play screen (3b).
+/* Tiles — Gus logic and rendering for the instrument-panel play screen (3b).
    Turn-based, so there is no animation loop: the board re-renders per move.
    Depends on catalog.js/stats.js for the local score history. */
 (() => {
@@ -36,7 +36,7 @@
   const overlay = byId("overlay"), ovTitle = byId("ovTitle"), ovMsg = byId("ovMsg");
   const startBtn = byId("startBtn"), newGusBtn = byId("newGusBtn");
 
-  const stats = window.Arcade && window.Arcade.stats;
+  const stats = window.Gus && window.Gus.stats;
   const num = stats ? stats.num : String;
 
   // ---------- Audio ----------
@@ -247,7 +247,7 @@
     sfx.over();
     if (stats && !state.recorded) {
       state.recorded = true;
-      stats.record("2048", {
+      stats.record("tiles", {
         score: state.score,
         level: Math.max(1, Math.round(Math.log2(bestTile(state.grid) || 2))),
         durationMs: Date.now() - state.startedAt,
@@ -309,7 +309,7 @@
   function renderTopScores() {
     if (!stats) return;
     const runs = stats.all()
-      .filter(r => r.gus === "2048")
+      .filter(r => r.gus === "tiles")
       .sort((a, b) => b.score - a.score || b.ts - a.ts)
       .slice(0, 4);
 
@@ -328,7 +328,7 @@
     const total = Math.floor((Date.now() - state.startedAt) / 1000);
     const mm = String(Math.floor(total / 60)).padStart(2, "0");
     const ss = String(total % 60).padStart(2, "0");
-    sessionMeta.textContent = `2048 / BUILD 1.0 / SESSION ${mm}:${ss}`;
+    sessionMeta.textContent = `TILES / BUILD 1.0 / SESSION ${mm}:${ss}`;
   }, 1000);
 
   // ---------- Input ----------

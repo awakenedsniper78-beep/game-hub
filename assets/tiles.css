@@ -1,4 +1,4 @@
-/* 2048-only panels: the tile grid, tile scale key and move log. */
+/* Tiles-only panels: the tile grid, tile scale key and move log. */
 
 /* Field scaling — the 4 x 4 grid is square and fluid; tile type is sized
    against the board frame so the numbers grow with the cells. */

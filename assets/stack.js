@@ -1,4 +1,4 @@
-/* Tetris — Gus logic and rendering for the instrument-panel play screen.
+/* Stack — Gus logic and rendering for the instrument-panel play screen.
    Depends on catalog.js/stats.js for the local score history. */
 (() => {
   "use strict";
@@ -48,7 +48,7 @@
   const overlay = byId("overlay"), ovTitle = byId("ovTitle"), ovMsg = byId("ovMsg");
   const startBtn = byId("startBtn"), pauseBtn = byId("pauseBtn");
 
-  const stats = window.Arcade && window.Arcade.stats;
+  const stats = window.Gus && window.Gus.stats;
 
   // ---------- Audio (Web Audio API, no files) ----------
   let audioCtx = null;
@@ -269,13 +269,13 @@
     const total = Math.floor(state.elapsedMs / 1000);
     const mm = String(Math.floor(total / 60)).padStart(2, "0");
     const ss = String(total % 60).padStart(2, "0");
-    sessionMeta.textContent = `TETRIS / BUILD 1.2 / SESSION ${mm}:${ss}`;
+    sessionMeta.textContent = `STACK / BUILD 1.2 / SESSION ${mm}:${ss}`;
   }
 
   function renderTopScores() {
     if (!stats) return;
     const runs = stats.all()
-      .filter(r => r.gus === "tetris")
+      .filter(r => r.gus === "stack")
       .sort((a, b) => b.score - a.score || b.ts - a.ts)
       .slice(0, 4);
 
@@ -390,7 +390,7 @@
     drawQueue();
 
     if (stats) {
-      stats.record("tetris", {
+      stats.record("stack", {
         score: state.score,
         lines: state.lines,
         level: state.level,
@@ -511,6 +511,6 @@
   renderTopScores();
   drawQueue();
   drawHold();
-  if (window.Arcade && window.Arcade.fitCanvas) window.Arcade.fitCanvas(boardCv, FIELD_W, FIELD_H, draw);
+  if (window.Gus && window.Gus.fitCanvas) window.Gus.fitCanvas(boardCv, FIELD_W, FIELD_H, draw);
   else draw();
 })();
